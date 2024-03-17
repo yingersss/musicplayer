@@ -29,7 +29,7 @@ public class MainApp extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Music Player");
-        loadStylesheetIntoScene(scene);
+        //loadStylesheetIntoScene(scene);
         stage.show();
 
     }

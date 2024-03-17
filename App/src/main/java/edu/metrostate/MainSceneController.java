@@ -23,12 +23,11 @@ public class MainSceneController implements ValueChangedListener {
     @FXML
     private MainToolBar mainToolBar;
     @FXML
-    private ListView<Song> songListView;
+    private ListView<String> songListView;
 
     ArrayList<Song> songsList;
+    ArrayList<String> songTitles;
     Song currentSong;
-
-    String[] songs;
 
     private ValueStore store;
 
@@ -36,29 +35,24 @@ public class MainSceneController implements ValueChangedListener {
 
 
     public void initialize() {
-        // label.setText("Hello, ICS372 JavaFX");
-        // hard coding songs into listview
-        /*
-        ObservableList<Song> songs = FXCollections.observableArrayList(
-                new Song("My Heart Will Go On", "Celine Dion", "Pop", 280.0, "Let's Talk About Love")
-                // add more songs if needed
-        );
-         */
+        // creating new songs
         Song song1 = new Song("My Heart Will Go On", "Celine Dion", "Pop", 280.0, "Let's Talk About Love");
         Song song2 = new Song("All I Want For Christmas Is You", "Mariah Carey", "Christmas", 280.0, "Merry Christmas");
         Song song3 = new Song("I Will Always Love you", "Whitney Houston", "Soul", 271.0, "The Bodyguard: Original Soundtrack");
 
+        // adding songs to list
         songsList.add(song1);
         songsList.add(song2);
         songsList.add(song3);
 
-        songListView.getItems().addAll(songsList);
-        songListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Song>() {
-            @Override
-            public void changed(ObservableValue<? extends Song> observableValue, Song song, Song t1) {
-                currentSong = songListView.getSelectionModel().getSelectedItem();
-            }
-        });
+        // putting the titles of each song into a tracktitle list
+        for(Song song : songsList) {
+            songTitles.add(song.getTrackTitle());
+        }
+
+        // putting tracktitle list into listview so we can view the songs
+        songListView.getItems().addAll(songTitles);
+
     }
 
     public void setValueStore(ValueStore store) {
