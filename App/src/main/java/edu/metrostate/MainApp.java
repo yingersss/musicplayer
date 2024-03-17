@@ -29,6 +29,7 @@ public class MainApp extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Music Player");
+        stage.setResizable(false); // couldnt figure out how to dynamically stretch the album image or vbox that held the image
         //loadStylesheetIntoScene(scene);
         stage.show();
 

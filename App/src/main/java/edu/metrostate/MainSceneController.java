@@ -25,9 +25,9 @@ public class MainSceneController implements ValueChangedListener {
     @FXML
     private ListView<String> songListView;
 
-    ArrayList<Song> songsList;
-    ArrayList<String> songTitles;
-    Song currentSong;
+    //ArrayList<Song> songsList;
+    //ArrayList<String> songTitles;
+    //Song currentSong;
 
     private ValueStore store;
 
@@ -38,8 +38,20 @@ public class MainSceneController implements ValueChangedListener {
         // creating new songs
         Song song1 = new Song("My Heart Will Go On", "Celine Dion", "Pop", 280.0, "Let's Talk About Love");
         Song song2 = new Song("All I Want For Christmas Is You", "Mariah Carey", "Christmas", 280.0, "Merry Christmas");
-        Song song3 = new Song("I Will Always Love you", "Whitney Houston", "Soul", 271.0, "The Bodyguard: Original Soundtrack");
+        Song song3 = new Song("I Will Always Love You", "Whitney Houston", "Soul", 271.0, "The Bodyguard: Original Soundtrack");
 
+        // creating tracks
+        Track track1 = new Track("Track 1", "Ying Vang", 30.0);
+
+        // creating playlist
+        Playlist yingsPlaylist = new Playlist("Ying's Playlist");
+
+        // creating audiobook
+        Audiobook book1 = new Audiobook("Test book 1", "Ying Vang", 66.0, 0);
+
+
+
+        /* wasn't really working as intended not quite sure how to populate listview with objects or even strings
         // adding songs to list
         songsList.add(song1);
         songsList.add(song2);
@@ -52,7 +64,7 @@ public class MainSceneController implements ValueChangedListener {
 
         // putting tracktitle list into listview so we can view the songs
         songListView.getItems().addAll(songTitles);
-
+         */
     }
 
     public void setValueStore(ValueStore store) {
