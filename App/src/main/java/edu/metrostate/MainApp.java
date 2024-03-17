@@ -1,8 +1,10 @@
 package edu.metrostate;
 
+import classes.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -18,23 +20,18 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("scene.fxml"));
-        BorderPane root = loader.load();
+        // loading the fxml file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("musicplayertest.fxml"));
+        AnchorPane root = loader.load();
 
         MainSceneController mainSceneController = loader.getController();
-        mainSceneController.setValueStore(store);
-
-        MainToolBar mainToolBar = new MainToolBar();
-        MainToolBarController mainToolBarController = new MainToolBarController(mainToolBar, store);
-        root.setTop(mainToolBar);
 
         Scene scene = new Scene(root);
-
-        loadStylesheetIntoScene(scene);
-
-        stage.setTitle("ICS 372 - HelloFX");
         stage.setScene(scene);
+        stage.setTitle("Music Player");
+        loadStylesheetIntoScene(scene);
         stage.show();
+
     }
 
     private void loadStylesheetIntoScene(Scene scene) {

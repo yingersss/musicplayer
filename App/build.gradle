@@ -10,7 +10,7 @@ repositories {
 
 javafx {
     version = "20"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = [ 'javafx.controls', 'javafx.fxml']
 }
 
 application {
@@ -23,4 +23,11 @@ jlink {
     launcher {
         name = 'App'
     }
+
+}
+
+dependencies {
+    implementation 'org.kordamp.ikonli:ikonli-remixicon-pack:12.3.1'
+    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+
 }
