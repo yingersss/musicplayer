@@ -56,8 +56,6 @@ public class MainSceneController implements ValueChangedListener {
         Song song2 = new Song("All I Want For Christmas Is You", "Mariah Carey", "Christmas", 280.0, "Merry Christmas");
         Song song3 = new Song("I Will Always Love You", "Whitney Houston", "Soul", 271.0, "The Bodyguard: Original Soundtrack");
 
-        // creating tracks
-        //Track track1 = new Track("Track 1", "Ying Vang", 30.0);
 
         // creating playlist
         Playlist yingsPlaylist = new Playlist("Ying's Playlist");
@@ -65,14 +63,9 @@ public class MainSceneController implements ValueChangedListener {
         // creating audiobook
         Audiobook book1 = new Audiobook("Test book 1", "Ying Vang", 66.0, 0);
 
-        playButton = new Button();
-        setButtonImage(playButton, "@/images/play.png");
-        setButtonImage(previousButton, "@/images/back.png");
-        setButtonImage(nextButton, "@/images/next.png");
-        setButtonImage(shuffleButton, "@/images/shuffle.png");
-        setButtonImage(repeatButton, "@/images/repeat.png");
 
-        /* wasn't really working as intended not quite sure how to populate listview with objects or even strings
+        /*
+        // wasn't really working as intended not quite sure how to populate listview with objects or even strings
         // adding songs to list
         songsList.add(song1);
         songsList.add(song2);
@@ -100,6 +93,7 @@ public class MainSceneController implements ValueChangedListener {
         value.setText(String.format(valueFormatString, newValue));
     }
 
+    // method to set a button to be round as well as to set images within them
     public void setButtonImage (Button button, String imgFilePath) {
         // button style
         String buttonStyle = "-fx-background-radius: 5em; " +
