@@ -7,6 +7,7 @@ public class Song extends Track{
     public Song (String trackTitle, String trackAuthor, String trackGenre, double trackLength, String albumName) {
         super(trackTitle, trackAuthor, trackLength);
         this.albumName = albumName;
+        this.genre = trackGenre;
     }
 
     // getter setter for albumName
@@ -18,4 +19,14 @@ public class Song extends Track{
     public void setAlbumName(String albumName) {
         this.albumName = albumName;
     }
+
+    // getter setter for genre
+    public String getGenre() {
+        return genre;
+    }
+
+    public  void setGenre(String genre) {
+        this.genre = genre;
+    }
+
 }

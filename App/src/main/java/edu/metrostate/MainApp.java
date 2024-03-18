@@ -1,11 +1,9 @@
 package edu.metrostate;
 
-import classes.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -24,7 +22,7 @@ public class MainApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("musicplayertest.fxml"));
         AnchorPane root = loader.load();
 
-        MainSceneController mainSceneController = loader.getController();
+        // MainSceneController mainSceneController = loader.getController();
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -35,6 +33,7 @@ public class MainApp extends Application {
 
     }
 
+    /*
     private void loadStylesheetIntoScene(Scene scene) {
         URL stylesheetURL = getClass().getResource("style.css");
         if (stylesheetURL == null) {
@@ -46,4 +45,5 @@ public class MainApp extends Application {
         }
         scene.getStylesheets().add(urlString);
     }
+     */
 }
