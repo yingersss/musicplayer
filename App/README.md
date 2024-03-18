@@ -1,16 +1,21 @@
-# Milestone 3
+# Project Skeleton
 
+When submitting your final project, delete the contents of this file and write your project build and run steps here.
 
-## Code Structure
-- 'classes' package: contains the core classes that we listed that include 'Track', 'Song', 'Audiobook','Playlist', 'UIConstructor', and 'TrackRepository'.
-- 'edu.metrostate' package: contains MainApp and the MainSceneController where we will be controlling the important bits of the initial UI of the application such as ListView, Buttons that include 'Play', 'Next', 'Back', 'Shuffle', and 'Repeat'. Within the MainSceneController class, I've instantiated objects such as Songs, Audiobooks, and Playlists.
-- 'resources': contains the musicplayertest.fxml that we've generated from SceneBuilder and where we hardcoded Strings of song names to put inside the ListView, as well as where we included ImageView into each Button to allow graphics rather than just text. Inside the resources folder also includes the images that we've used.
+This is a base project upon which a JavaFX application can be built. It is meant to
+be used with Intellij IDEA and has been tested with the [community edition](https://www.jetbrains.com/idea/download).
 
-## Running the Application
-To run the application follow these steps:
+This project uses [Gradle](https://gradle.org) through the "Gradlew Wrapper" (this means that you don't need to
+install) Gradle separately as its build tool and requires a Java
+Development Kit version 17 If using IntelliJ IDEA, new versions of the JDK can be installed without leaving the IDE.
+Open the settings pane by selecting "IntelliJ IDEA -> Settings" on MacOS and "File -> Settings" on Windows. Then
+on the left side of the settings pane expand "Build, Execution, Deployment" -> "Build Tools" -> "Gradle". Then in
+the pane on the right near the bottom there is a dropdown menu labeled "Gradle JVM". Click on the dropdown, then on
+"+ Add SDK" -> "Download JDK". In the new popup select 17 for version and then for version select
+"Eclipse Temurin (AdoptOpenJDK HotSpot) 17.0.4". If you have a Mac with Apple Silicon select
+"Eclipse Temurin (AdoptOpenJDK HotSpot) 17.0.4 aarch64".
 
-1. Ensure that you have Java Development Kit (JDK) installed on your system.
-2. After extracting the file, open the file via an IDE (we are using IntelliJ Community Edition).
-3. Navigate to musicplayer\App\src\main\java\edu\metrostate where you will find the MainApp class.
-4. Select MainApp and run it.
-5. The application should then start and give you the very minimal bare bones of our application UI.
+After installing the JDK click on the elephant icon on the top right side IntelliJ to synchronize your project and
+dependencies. Once that is complete, ensure that "ICS372" run configuration is selected in the dropdown to the
+left of the green play button on the top right side of the toolbar and then click the play button. The project will
+compile and then start the application.
