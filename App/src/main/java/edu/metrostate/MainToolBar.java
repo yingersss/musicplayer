@@ -10,7 +10,7 @@ import javafx.scene.shape.Circle;
 
 public class MainToolBar extends ToolBar {
 
-    //Button addButton;
+    /* Button addButton;
 
     //Button subtractButton;
     Button playButton;
@@ -67,4 +67,3 @@ public class MainToolBar extends ToolBar {
          */
 
     }
-}

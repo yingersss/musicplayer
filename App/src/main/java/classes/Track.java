@@ -1,5 +1,5 @@
 package classes;
-public class Track {
+public abstract class Track {
     private String trackTitle;
     private String trackAuthor;
     private double trackLength;
