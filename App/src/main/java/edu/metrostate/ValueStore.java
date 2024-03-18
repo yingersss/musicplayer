@@ -24,6 +24,7 @@ public class ValueStore {
         }
     }
 
+    /*
     public void decrement() {
         this.value -= 1;
         notifyListeners();
@@ -33,6 +34,7 @@ public class ValueStore {
         this.value += 1;
         notifyListeners();
     }
+     */
 
     private void notifyListeners() {
         for (ValueChangedListener listener : listeners) {
