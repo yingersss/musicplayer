@@ -13,6 +13,7 @@ To run the application follow these steps:
 2. Extract the zip file.
 3. Open the file via an IDE (we are using IntelliJ Community Edition).
 4. This application will require JDK version 17, make sure you have that installed.
-5. Click on the elephant icon on the top right side if using IntelliJ to synchronize project and dependencies.
-6. Ensure that "Music Player" run configuration is selected in the dropdown menu to the left of the green button on the top right side of the toolbar
-7. Click the play button, the project should then compile and start the application, showing the skeleton of our application UI.
+5. If you are using another IDE, you can locate MainApp.java in App\src\main\java\edu.metrostate\MainApp and run that file.
+6. If you are using IntelliJ, click on the elephant icon on the top right side if using IntelliJ to synchronize project and dependencies.
+7. Ensure that "Music Player" run configuration is selected in the dropdown menu to the left of the green button on the top right side of the toolbar
+8. Click the play button, the project should then compile and start the application, showing the skeleton of our application UI.
