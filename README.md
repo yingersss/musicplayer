@@ -9,8 +9,8 @@
 To run the application follow these steps:
 
 1. Ensure that you have Java Development Kit (JDK) installed on your system.
-2. Extract the zip file.
-3. Open the file via an IDE (we are using IntelliJ Community Edition).
+2. Extract the zip file to a location you can access.
+3. Open the file (folder) via an IDE (we are using IntelliJ Community Edition).
 4. This application will require JDK version 17, make sure you have that installed.
 5. Click on the elephant icon on the top right side if using IntelliJ to synchronize project and dependencies.
 6. Ensure that "Music Player" run configuration is selected in the dropdown menu to the left of the green button on the top right side of the toolbar
