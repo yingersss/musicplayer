@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import java.time.LocalDate;
 
 import java.util.ArrayList;
 
@@ -63,6 +64,15 @@ public class MainSceneController implements ValueChangedListener {
         // creating audiobook
         Audiobook book1 = new Audiobook("Test book 1", "Ying Vang", 66.0, 0);
 
+        // creating podcast
+        Podcast JoeRogan = new Podcast("The Joe Rogan Experience", "The offical podcast of comedian Joe Rogan", "Joe Rogan",LocalDate.of(2009, 12, 24));
+
+        // creating episodes
+
+        Episode episode1 = new Episode("Pilot And Introductions", "Joe Rogan", 60.0, "The Very First Episode of Joe Rogan's Podcast", LocalDate.of(2009, 12, 24));
+
+        // adding it into joerogan podcast
+        JoeRogan.addEpisode(episode1);
 
         /*
         // wasn't really working as intended not quite sure how to populate listview with objects or even strings
