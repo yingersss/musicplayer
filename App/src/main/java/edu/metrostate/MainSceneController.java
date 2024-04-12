@@ -43,6 +43,8 @@ public class MainSceneController implements Initializable {
     // time label
     @FXML
     private Label timeLabel;
+    @FXML
+    private Slider volumeSlider;
 
 
     // this is right side song information column
@@ -95,37 +97,6 @@ public class MainSceneController implements Initializable {
         currentPlayer.play();
     }
 
-    private void setupMediaPlayerEvents() {
-        if (currentPlayer != null) {
-            currentPlayer.setOnPlaying(() -> setButtonIcon(playButton, "pause.png"));
-            currentPlayer.setOnPaused(() -> setButtonIcon(playButton, "play.png"));
-            currentPlayer.setOnStopped(() -> {
-                setButtonIcon(playButton, "play.png");
-                progressBar.setProgress(0);
-                cleanupMediaPlayer();
-            });
-            currentPlayer.setOnEndOfMedia(() -> {
-                setButtonIcon(playButton, "play.png");
-                progressBar.setProgress(1);
-                cleanupMediaPlayer();
-            });
-        }
-    }
-
-    private void cleanupMediaPlayer() {
-        if (currentPlayer != null) {
-            currentPlayer.currentTimeProperty().removeListener((obs, oldTime, newTime) -> {
-                if (currentPlayer != null && currentPlayer.getTotalDuration() != null) {
-                    progressBar.setProgress(newTime.toMillis() / currentPlayer.getTotalDuration().toMillis());
-                }
-            });
-            currentPlayer.dispose();
-            currentPlayer = null;
-            currentSong = null; // Reset the current song as playback has finished.
-        }
-    }
-
-
     private void initializeProgressBar() {
         progressBar.setProgress(0); // Set the progress to 0
     }
@@ -165,6 +136,47 @@ public class MainSceneController implements Initializable {
                 currentSeconds / 60, currentSeconds % 60,
                 totalSeconds / 60, totalSeconds % 60);
         timeLabel.setText(timeText);
+    }
+    private void setupMediaPlayerEvents() {
+        if (currentPlayer != null) {
+            currentPlayer.setOnPlaying(() -> setButtonIcon(playButton, "pause.png"));
+            currentPlayer.setOnPaused(() -> setButtonIcon(playButton, "play.png"));
+            currentPlayer.setOnStopped(() -> {
+                setButtonIcon(playButton, "play.png");
+                progressBar.setProgress(0);
+                cleanupMediaPlayer();
+            });
+            currentPlayer.setOnEndOfMedia(() -> {
+                setButtonIcon(playButton, "play.png");
+                progressBar.setProgress(1);
+                cleanupMediaPlayer();
+            });
+
+            // This is where you set up the volume control when the MediaPlayer is ready.
+            currentPlayer.setOnReady(() -> {
+                setupVolumeControl();
+            });
+        }
+    }
+
+    private void cleanupMediaPlayer() {
+        if (currentPlayer != null) {
+            currentPlayer.currentTimeProperty().removeListener((obs, oldTime, newTime) -> {
+                if (currentPlayer != null && currentPlayer.getTotalDuration() != null) {
+                    progressBar.setProgress(newTime.toMillis() / currentPlayer.getTotalDuration().toMillis());
+                }
+            });
+            currentPlayer.dispose();
+            currentPlayer = null;
+            currentSong = null; // Reset the current song as playback has finished.
+        }
+    }
+
+    private void setupVolumeControl() {
+        if (currentPlayer != null) {
+            volumeSlider.setValue(currentPlayer.getVolume() * 100); // assuming your volumeSlider's max is 100
+            currentPlayer.volumeProperty().bind(volumeSlider.valueProperty().divide(100)); // if your volumeSlider's max is 1, just bind without division
+        }
     }
 
     // method to set a button to show the correct icon (play or pause)
@@ -305,6 +317,7 @@ public class MainSceneController implements Initializable {
                         String absolutePath = file.getAbsolutePath(); // Get absolute path directly
                         Media media = new Media(file.toURI().toString());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
+
 
                         mediaPlayer.setOnReady(() -> {
                             String title = (String) media.getMetadata().get("title");
