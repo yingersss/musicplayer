@@ -5,10 +5,11 @@ public class Song extends Track{
     private String filePath;
 
     // constructor
-    public Song (String trackTitle, String trackAuthor, String trackGenre, double trackLength, String albumName) {
+    public Song (String trackTitle, String trackAuthor, String trackGenre, double trackLength, String albumName, String filePath) {
         super(trackTitle, trackAuthor, trackLength);
         this.albumName = albumName;
         this.genre = trackGenre;
+        this.filePath = filePath;
     }
 
     // getter setter for albumName
@@ -38,11 +39,10 @@ public class Song extends Track{
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-
     public static Song createFromFilePath(String filePath) {
         // Here you would parse the MP3 file to get metadata like title, artist, etc.
         // For simplicity, we're just using dummy data.
-        return new Song("Song Title", "Artist", "Genre", 240, "Album");
+        return new Song("Song Title", "Artist", "Genre", 240, "Album", filePath);
     }
 
 }

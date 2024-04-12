@@ -1,6 +1,7 @@
 package edu.metrostate;
 
 import classes.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,16 +14,21 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-
+import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainSceneController implements Initializable {
     private MediaPlayer currentPlayer;
-
+    private static final String SONG_LIST_FILE = "songs.txt"; // The name of the file to store the song paths
 
     @FXML
     private Label label;
@@ -51,8 +57,10 @@ public class MainSceneController implements Initializable {
     private void handlePlayAction() {
         Song selectedSong = songListView.getSelectionModel().getSelectedItem();
         if (selectedSong != null) {
+            System.out.println("Selected song: " + selectedSong.getFilePath()); // Debug: Check selected file path
             if (currentPlayer != null) {
                 MediaPlayer.Status status = currentPlayer.getStatus();
+                System.out.println("Current player status: " + status); // Debug: Check current player status
                 if (status == MediaPlayer.Status.PLAYING) {
                     currentPlayer.pause();
                     setButtonIcon(playButton, "play.png"); // Change to play icon
@@ -61,23 +69,21 @@ public class MainSceneController implements Initializable {
                     setButtonIcon(playButton, "pause.png"); // Change to pause icon
                 }
             } else {
-                // Create a new MediaPlayer to play the selected song
-                Media media = new Media(selectedSong.getFilePath());
-                currentPlayer = new MediaPlayer(media);
-                currentPlayer.play();
-                setButtonIcon(playButton, "pause.png"); // Change to pause icon
+                try {
+                    Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
+                    currentPlayer = new MediaPlayer(media);
+                    currentPlayer.play();
+                    setButtonIcon(playButton, "pause.png"); // Change to pause icon
+                    System.out.println("Playing new song: " + selectedSong.getFilePath()); // Debug: Confirm new song is playing
+                } catch (Exception e) {
+                    System.err.println("Error playing media: " + e.getMessage()); // Debug: Catch any errors
+                    e.printStackTrace();
+                }
             }
         }
     }
-    // method to set a button to show the correct icon (play or pause)
-    private void setButtonIcon(Button button, String iconName) {
-        Image img = new Image(getClass().getResourceAsStream("/images/" + iconName));
-        ImageView iconView = new ImageView(img);
-        iconView.setPreserveRatio(true);
-        iconView.setFitWidth(40); // set the size as appropriate for your UI
-        iconView.setFitHeight(40); // set the size as appropriate for your UI
-        button.setGraphic(iconView);
-    }
+
+
     @FXML
     private void handlePreviousAction() {
     }
@@ -91,10 +97,85 @@ public class MainSceneController implements Initializable {
     private void handleRepeatAction() {
     }
 
+    // method to set a button to show the correct icon (play or pause)
+    private void setButtonIcon(Button button, String iconName) {
+        Image img = new Image(getClass().getResourceAsStream("/images/" + iconName));
+        ImageView iconView = new ImageView(img);
+        iconView.setPreserveRatio(true);
+        iconView.setFitWidth(40); // set the size as appropriate for your UI
+        iconView.setFitHeight(40); // set the size as appropriate for your UI
+        button.setGraphic(iconView);
+    }
+    private void loadSongList() {
+        Path path = Paths.get(SONG_LIST_FILE);
+        if (Files.exists(path)) {
+            try {
+                List<String> lines = Files.readAllLines(path);
+                for (String line : lines) {
+                    File file = new File(line); // Ensure the line is just a path
+                    if (file.exists() && file.getName().toLowerCase().endsWith(".mp3")) {
+                        Media media = new Media(file.toURI().toString());
+                        MediaPlayer mediaPlayer = new MediaPlayer(media);
 
+                        mediaPlayer.setOnReady(() -> {
+                            String title = (String) media.getMetadata().get("title");
+                            String artist = (String) media.getMetadata().get("artist");
+                            String album = (String) media.getMetadata().get("album");
+                            Double duration = media.getDuration().toSeconds();
+
+                            if (title == null || title.isEmpty()) {
+                                title = file.getName().substring(0, file.getName().lastIndexOf('.'));
+                            }
+
+                            Song song = new Song(title, artist, album, duration, "Unknown Genre", line);
+                            Platform.runLater(() -> {
+                                songListView.getItems().add(song);
+                            });
+                            mediaPlayer.dispose();
+                        });
+                        mediaPlayer.play();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Song createSongFromMedia(MediaPlayer mediaPlayer, File file) {
+        String title = (String) mediaPlayer.getMedia().getMetadata().get("title");
+        String artist = (String) mediaPlayer.getMedia().getMetadata().get("artist");
+        String album = (String) mediaPlayer.getMedia().getMetadata().get("album");
+        Double duration = mediaPlayer.getMedia().getDuration().toSeconds();
+        if (title == null || title.isEmpty()) title = file.getName();
+        return new Song(title, artist, album, duration, "Unknown Genre", file.getAbsolutePath());
+    }
+
+    private void saveSongList() {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(SONG_LIST_FILE))) {
+            for (Song song : songListView.getItems()) {
+                // Write only the absolute file path
+                writer.write(new File(song.getFilePath()).getAbsolutePath());
+                writer.newLine();
+                System.out.println("Captured path: " + new File(song.getFilePath()).getAbsolutePath());
+                System.out.println("Saving path: " + new File(song.getFilePath()).getAbsolutePath());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    // Call this method when application is closing
+    @FXML
+    void handleApplicationClose() {
+        saveSongList();
+    }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        loadSongList();
         // Configure the ListView to accept dragged files
         songListView.setOnDragOver(event -> {
             if (event.getGestureSource() != songListView &&
@@ -126,32 +207,24 @@ public class MainSceneController implements Initializable {
                 success = true;
                 for (File file : db.getFiles()) {
                     if (file.getName().toLowerCase().endsWith(".mp3")) {
-                        // Create a Media object for the dragged MP3 file
+                        String absolutePath = file.getAbsolutePath(); // Get absolute path directly
                         Media media = new Media(file.toURI().toString());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
 
                         mediaPlayer.setOnReady(() -> {
-                            // Extract metadata once it's available
                             String title = (String) media.getMetadata().get("title");
                             String artist = (String) media.getMetadata().get("artist");
                             String album = (String) media.getMetadata().get("album");
                             Double duration = media.getDuration().toSeconds();
-
-                            // Use a default title if no metadata title is found
                             if (title == null || title.isEmpty()) {
                                 title = file.getName();
                             }
-
-                            // Create a new Song object and add it to the ListView
-                            Song song = new Song(title, artist, album, duration, "Unknown Genre");
-                            song.setFilePath(file.toURI().toString()); // Make sure you have a setter for filePath in your Song class
-                            songListView.getItems().add(song);
-
-                            // Stop the MediaPlayer as we only needed it for loading metadata
-                            mediaPlayer.stop();
+                            Song song = new Song(title, artist, album, duration, "Unknown Genre", absolutePath);
+                            Platform.runLater(() -> {
+                                songListView.getItems().add(song);
+                            });
+                            mediaPlayer.dispose();
                         });
-
-                        // Play the MediaPlayer which will trigger loading of the media and metadata
                         mediaPlayer.play();
                     }
                 }
@@ -159,6 +232,8 @@ public class MainSceneController implements Initializable {
             event.setDropCompleted(success);
             event.consume();
         });
+
+
         // creating observableList and populating
         ObservableList<Song> songObservableList = FXCollections.observableArrayList();
 
@@ -178,27 +253,5 @@ public class MainSceneController implements Initializable {
             }
         });
 
-
-    }
-
-    // method to set a button to be round as well as to set images within them
-    public void setButtonImage (Button button, String imgFilePath) {
-        // button style
-        String buttonStyle = "-fx-background-radius: 5em; " +
-                "-fx-min-width: 40px; " +
-                "-fx-min-height: 40px; " +
-                "-fx-max-width: 40px; " +
-                "-fx-max-height: 40px;";
-
-        button.setPrefSize(50, 50);
-        Image img = new Image(imgFilePath);
-        ImageView view = new ImageView(img);
-        view.setPreserveRatio(true);
-        view.fitHeightProperty().bind(button.heightProperty());
-        view.fitWidthProperty().bind(button.widthProperty());
-        button.setGraphic(view);
-        button.setContentDisplay(ContentDisplay.CENTER);
-        view.setTranslateX(2); // only if needed
-        button.setStyle(buttonStyle);
     }
 }
