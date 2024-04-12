@@ -21,6 +21,7 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -33,8 +34,16 @@ public class MainSceneController implements Initializable {
     // left side column song listview
     @FXML
     private ListView<Song> songListView;
+    // album image view
     @FXML
     private ImageView albumImageView;
+    // progress bar on bottom of application
+    @FXML
+    private ProgressBar progressBar;
+    // time label
+    @FXML
+    private Label timeLabel;
+
 
     // this is right side song information column
     @FXML private Label songNameInfo;
@@ -82,6 +91,7 @@ public class MainSceneController implements Initializable {
         Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
         currentPlayer = new MediaPlayer(media);
         setupMediaPlayerEvents();
+        setupProgressBar(); // Call this method when MediaPlayer is ready and playing
         currentPlayer.play();
     }
 
@@ -89,15 +99,35 @@ public class MainSceneController implements Initializable {
         if (currentPlayer != null) {
             currentPlayer.setOnPlaying(() -> setButtonIcon(playButton, "pause.png"));
             currentPlayer.setOnPaused(() -> setButtonIcon(playButton, "play.png"));
-            currentPlayer.setOnStopped(() -> setButtonIcon(playButton, "play.png"));
-            currentPlayer.setOnEndOfMedia(() -> {
-                currentPlayer.stop();
-                currentPlayer.dispose();
-                currentPlayer = null;
+            currentPlayer.setOnStopped(() -> {
                 setButtonIcon(playButton, "play.png");
-                currentSong = null; // Reset the current song as playback has finished.
+                progressBar.setProgress(0);
+                cleanupMediaPlayer();
+            });
+            currentPlayer.setOnEndOfMedia(() -> {
+                setButtonIcon(playButton, "play.png");
+                progressBar.setProgress(1);
+                cleanupMediaPlayer();
             });
         }
+    }
+
+    private void cleanupMediaPlayer() {
+        if (currentPlayer != null) {
+            currentPlayer.currentTimeProperty().removeListener((obs, oldTime, newTime) -> {
+                if (currentPlayer != null && currentPlayer.getTotalDuration() != null) {
+                    progressBar.setProgress(newTime.toMillis() / currentPlayer.getTotalDuration().toMillis());
+                }
+            });
+            currentPlayer.dispose();
+            currentPlayer = null;
+            currentSong = null; // Reset the current song as playback has finished.
+        }
+    }
+
+
+    private void initializeProgressBar() {
+        progressBar.setProgress(0); // Set the progress to 0
     }
 
     @FXML
@@ -113,13 +143,37 @@ public class MainSceneController implements Initializable {
     private void handleRepeatAction() {
     }
 
+    private void setupProgressBar() {
+        if (currentPlayer != null) {
+            progressBar.progressProperty().unbind();
+            progressBar.setProgress(0);
+            currentPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+                javafx.util.Duration currentTime = newValue;
+                javafx.util.Duration totalDuration = currentPlayer.getTotalDuration();
+
+                if (currentPlayer != null && totalDuration != null) {
+                    progressBar.setProgress(currentTime.toMillis() / totalDuration.toMillis());
+                    updateTimeLabel(currentTime, totalDuration);
+                }
+            });
+        }
+    }
+    private void updateTimeLabel(javafx.util.Duration currentTime, javafx.util.Duration totalDuration) {
+        int currentSeconds = (int) currentTime.toSeconds();
+        int totalSeconds = (int) totalDuration.toSeconds();
+        String timeText = String.format("%d:%02d / %d:%02d",
+                currentSeconds / 60, currentSeconds % 60,
+                totalSeconds / 60, totalSeconds % 60);
+        timeLabel.setText(timeText);
+    }
+
     // method to set a button to show the correct icon (play or pause)
     private void setButtonIcon(Button button, String iconName) {
         Image img = new Image(getClass().getResourceAsStream("/images/" + iconName));
         ImageView iconView = new ImageView(img);
         iconView.setPreserveRatio(true);
-        iconView.setFitWidth(40); // set the size as appropriate for your UI
-        iconView.setFitHeight(40); // set the size as appropriate for your UI
+        iconView.setFitWidth(40);
+        iconView.setFitHeight(40);
         button.setGraphic(iconView);
     }
     private void loadSongList() {
@@ -216,6 +270,7 @@ public class MainSceneController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadSongList();
+        initializeProgressBar();
         // Configure the ListView to accept dragged files
         songListView.setOnDragOver(event -> {
             if (event.getGestureSource() != songListView &&
