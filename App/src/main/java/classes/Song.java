@@ -1,8 +1,12 @@
 package classes;
+
+import javafx.scene.image.Image;
+
 public class Song extends Track{
     private String albumName;
     private String genre;
     private String filePath;
+    private Image albumImage;
 
     // constructor
     public Song (String trackTitle, String trackAuthor, String trackGenre, double trackLength, String albumName, String filePath) {
@@ -38,6 +42,15 @@ public class Song extends Track{
     // filePath setter
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+    // Add a setter for the album image
+    public void setAlbumImage(Image albumImage) {
+        this.albumImage = albumImage;
+    }
+
+    // Add a getter for the album image
+    public Image getAlbumImage() {
+        return albumImage;
     }
     public static Song createFromFilePath(String filePath) {
         // Here you would parse the MP3 file to get metadata like title, artist, etc.

@@ -108,11 +108,7 @@
          <children>
             <AnchorPane maxHeight="600.0" maxWidth="600.0" minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <ImageView fitHeight="380.0" fitWidth="380.0" layoutX="10.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                     <image>
-                        <Image url="@/images/albumart.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="albumImageView" fitHeight="380.0" fitWidth="380.0" layoutX="10.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true" />
                </children>
                <VBox.margin>
                   <Insets />

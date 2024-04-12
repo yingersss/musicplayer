@@ -13,7 +13,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -31,15 +30,11 @@ public class MainSceneController implements Initializable {
     private Song currentSong;
     private static final String SONG_LIST_FILE = "songs.txt"; // The name of the file to store the song paths
 
-    @FXML
-    private Label label;
-
-    @FXML
-    private Label value;
-
     // left side column song listview
     @FXML
     private ListView<Song> songListView;
+    @FXML
+    private ImageView albumImageView;
 
     // this is right side song information column
     @FXML private Label songNameInfo;
@@ -82,7 +77,6 @@ public class MainSceneController implements Initializable {
                 currentSong = null; // Clear current song as it's different.
             }
         }
-
         // At this point, either no MediaPlayer was present or a new song was selected.
         currentSong = selectedSong; // Update the current song.
         Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
@@ -134,7 +128,7 @@ public class MainSceneController implements Initializable {
             try {
                 List<String> lines = Files.readAllLines(path);
                 for (String line : lines) {
-                    File file = new File(line); // Ensure the line is just a path
+                    File file = new File(line);
                     if (file.exists() && file.getName().toLowerCase().endsWith(".mp3")) {
                         Media media = new Media(file.toURI().toString());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -144,12 +138,15 @@ public class MainSceneController implements Initializable {
                             String artist = (String) media.getMetadata().get("artist");
                             String album = (String) media.getMetadata().get("album");
                             Double duration = media.getDuration().toSeconds();
+                            Image albumImage = (Image) media.getMetadata().get("image"); // Extract the album art
 
                             if (title == null || title.isEmpty()) {
                                 title = file.getName().substring(0, file.getName().lastIndexOf('.'));
                             }
 
                             Song song = new Song(title, artist, album, duration, "Unknown Genre", line);
+                            song.setAlbumImage(albumImage); // Set the album art in the Song object
+
                             Platform.runLater(() -> {
                                 songListView.getItems().add(song);
                             });
@@ -187,14 +184,35 @@ public class MainSceneController implements Initializable {
         }
     }
 
-
-
-
     // Call this method when application is closing
     @FXML
     void handleApplicationClose() {
         saveSongList();
     }
+
+    private void updateSongInfoDisplay(Song song) {
+        if (song != null) {
+            songNameInfo.setText(song.getTrackTitle());
+            artistNameInfo.setText(song.getTrackAuthor());
+            albumNameInfo.setText(song.getAlbumName());
+            genreInfo.setText(song.getGenre());
+
+            Image albumArt = song.getAlbumImage();
+            if (albumArt != null) {
+                albumImageView.setImage(albumArt);
+            } else {
+                albumImageView.setImage(null); // Set to a default image or clear it if there's no album art
+            }
+        } else {
+            // Clear the labels and the album image if there's no song selected
+            songNameInfo.setText("");
+            artistNameInfo.setText("");
+            albumNameInfo.setText("");
+            genreInfo.setText("");
+            albumImageView.setImage(null);
+        }
+    }
+
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadSongList();
@@ -238,10 +256,12 @@ public class MainSceneController implements Initializable {
                             String artist = (String) media.getMetadata().get("artist");
                             String album = (String) media.getMetadata().get("album");
                             Double duration = media.getDuration().toSeconds();
+                            Image albumImage = (Image) media.getMetadata().get("image"); // extracts album art
                             if (title == null || title.isEmpty()) {
                                 title = file.getName();
                             }
                             Song song = new Song(title, artist, album, duration, "Unknown Genre", absolutePath);
+                            song.setAlbumImage(albumImage); // Set the album art in the Song object
                             Platform.runLater(() -> {
                                 songListView.getItems().add(song);
                             });
@@ -275,5 +295,9 @@ public class MainSceneController implements Initializable {
             }
         });
 
+        // Add a ChangeListener to the ListView's selection model
+        songListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            updateSongInfoDisplay(newValue);
+        });
     }
 }
