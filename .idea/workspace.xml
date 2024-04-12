@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="populated songListView with song objects via listcell factory&#10;added action handlers for buttons&#10;deleted some unused code">
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="added drag and drop feature&#10;currently not taking mp3 file's metadata to fill in the details yet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/App/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/Song.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,12 +26,7 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="App" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -58,17 +55,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.MainApp.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.App [:MainApp.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build App.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.MainApp.executor": "Run",
+    "Gradle.App [:MainApp.main()].executor": "Run",
+    "Gradle.Build App.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/yvang/OneDrive/Desktop/musicplayer/musicplayer/App/src/main/resources/images"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\images" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Music Player" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
@@ -120,13 +123,22 @@
       <option name="project" value="LOCAL" />
       <updated>1712882153143</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added drag and drop feature&#10;currently not taking mp3 file's metadata to fill in the details yet">
+      <option name="closed" value="true" />
+      <created>1712883390861</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1712883390861</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fixed README.md" />
     <MESSAGE value="removed UIConstructor in README.md&#10;added Episode and Podcast classes&#10;instantiated them inside the MainSceneController class" />
     <MESSAGE value="populated songListView with song objects via listcell factory&#10;added action handlers for buttons&#10;deleted some unused code" />
-    <option name="LAST_COMMIT_MESSAGE" value="populated songListView with song objects via listcell factory&#10;added action handlers for buttons&#10;deleted some unused code" />
+    <MESSAGE value="added drag and drop feature&#10;currently not taking mp3 file's metadata to fill in the details yet" />
+    <option name="LAST_COMMIT_MESSAGE" value="added drag and drop feature&#10;currently not taking mp3 file's metadata to fill in the details yet" />
   </component>
 </project>

@@ -2,6 +2,7 @@ package classes;
 public class Song extends Track{
     private String albumName;
     private String genre;
+    private String filePath;
 
     // constructor
     public Song (String trackTitle, String trackAuthor, String trackGenre, double trackLength, String albumName) {
@@ -27,6 +28,15 @@ public class Song extends Track{
 
     public  void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    // filePath setter
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public static Song createFromFilePath(String filePath) {
