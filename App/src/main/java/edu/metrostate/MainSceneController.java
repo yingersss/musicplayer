@@ -1,23 +1,21 @@
 package edu.metrostate;
 
 import classes.*;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.net.URL;
 import java.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class MainSceneController implements ValueChangedListener {
+public class MainSceneController implements Initializable {
 
     @FXML
     private Label label;
@@ -27,7 +25,7 @@ public class MainSceneController implements ValueChangedListener {
 
     // left side column song listview
     @FXML
-    private ListView<String> songListView;
+    private ListView<Song> songListView;
 
     // this is right side song information column
     @FXML private Label songNameInfo;
@@ -41,17 +39,24 @@ public class MainSceneController implements ValueChangedListener {
     @FXML private Button shuffleButton;
     @FXML private Button repeatButton;
 
-    //ArrayList<Song> songsList;
-    //ArrayList<String> songTitles;
-    //Song currentSong;
+    // action handlers
+    @FXML
+    private void handlePlayAction() {
+    }
+    @FXML
+    private void handlePreviousAction() {
+    }
+    @FXML
+    private void handleNextAction() {
+    }
+    @FXML
+    private void handleShuffleAction() {
+    }
+    @FXML
+    private void handleRepeatAction() {
+    }
 
-    private ValueStore store;
-
-    private final String valueFormatString = "Current value: %d";
-
-    public void initialize() {
-
-
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         // creating new songs
         Song song1 = new Song("My Heart Will Go On", "Celine Dion", "Pop", 280.0, "Let's Talk About Love");
         Song song2 = new Song("All I Want For Christmas Is You", "Mariah Carey", "Christmas", 280.0, "Merry Christmas");
@@ -74,33 +79,29 @@ public class MainSceneController implements ValueChangedListener {
         // adding it into joerogan podcast
         JoeRogan.addEpisode(episode1);
 
-        /*
-        // wasn't really working as intended not quite sure how to populate listview with objects or even strings
-        // adding songs to list
-        songsList.add(song1);
-        songsList.add(song2);
-        songsList.add(song3);
+        // creating observableList and populating
+        ObservableList<Song> songObservableList = FXCollections.observableArrayList();
+        songObservableList.add(song1);
+        songObservableList.add(song2);
+        songObservableList.add(song3);
 
-        // putting the titles of each song into a tracktitle list
-        for(Song song : songsList) {
-            songTitles.add(song.getTrackTitle());
-        }
+        // setting songListView with the items/songs in the songObservableList
+        songListView.setItems(songObservableList);
+        // cell factory so that it displays string title rather than object reference
+        songListView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            public void updateItem(Song song, boolean empty) {
+                // call default implementation
+                super.updateItem(song, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(song.getTrackTitle());
+                }
+            }
+        });
 
-        // putting tracktitle list into listview so we can view the songs
-        songListView.getItems().addAll(songTitles);
-         */
-    }
 
-    public void setValueStore(ValueStore store) {
-        this.store = store;
-        if (this.store != null) {
-            this.store.registerValueChangeListener(this);
-        }
-    }
-
-    @Override
-    public void onValueChange(int newValue) {
-        value.setText(String.format(valueFormatString, newValue));
     }
 
     // method to set a button to be round as well as to set images within them

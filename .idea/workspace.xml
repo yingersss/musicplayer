@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="removed UIConstructor in README.md&#10;added Episode and Podcast classes&#10;instantiated them inside the MainSceneController class">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +25,12 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="App" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -51,17 +59,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.MainApp.executor": "Run",
-    "Gradle.App [:MainApp.main()].executor": "Run",
-    "Gradle.Build App.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MainApp.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.App [:MainApp.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build App.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Music Player" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
