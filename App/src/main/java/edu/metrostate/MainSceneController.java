@@ -8,6 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -57,6 +59,31 @@ public class MainSceneController implements Initializable {
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // adding drag event handlers to the songListView
+        songListView.setOnDragOver(event -> {
+            if (event.getGestureSource() != songListView && event.getDragboard().hasFiles()) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+            event.consume();
+        });
+
+        songListView.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                success = true;
+                db.getFiles().forEach(file -> {
+                    if (file.getName().toLowerCase().endsWith(".mp3")) {
+                        Song song = Song.createFromFilePath(file.getAbsolutePath());
+                        songListView.getItems().add(song);
+                    }
+                });
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+
         // creating new songs
         Song song1 = new Song("My Heart Will Go On", "Celine Dion", "Pop", 280.0, "Let's Talk About Love");
         Song song2 = new Song("All I Want For Christmas Is You", "Mariah Carey", "Christmas", 280.0, "Merry Christmas");
