@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="added drag and drop feature&#10;currently not taking mp3 file's metadata to fill in the details yet">
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="added feature where application saves paths of songs loaded in and reloads them again on application start up&#10;need to work on event handlers that handle selecting and changing what song is currently playing">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/App/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/Song.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +128,23 @@
       <option name="project" value="LOCAL" />
       <updated>1712883390861</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="added pause image in resources&#10;song now plays when i click play after dragging them&#10;play button also switches to pause when i click them">
+      <option name="closed" value="true" />
+      <created>1712895188370</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1712895188370</updated>
+    </task>
+    <task id="LOCAL-00006" summary="added feature where application saves paths of songs loaded in and reloads them again on application start up&#10;need to work on event handlers that handle selecting and changing what song is currently playing">
+      <option name="closed" value="true" />
+      <created>1712900528760</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1712900528760</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -139,6 +152,8 @@
     <MESSAGE value="removed UIConstructor in README.md&#10;added Episode and Podcast classes&#10;instantiated them inside the MainSceneController class" />
     <MESSAGE value="populated songListView with song objects via listcell factory&#10;added action handlers for buttons&#10;deleted some unused code" />
     <MESSAGE value="added drag and drop feature&#10;currently not taking mp3 file's metadata to fill in the details yet" />
-    <option name="LAST_COMMIT_MESSAGE" value="added drag and drop feature&#10;currently not taking mp3 file's metadata to fill in the details yet" />
+    <MESSAGE value="added pause image in resources&#10;song now plays when i click play after dragging them&#10;play button also switches to pause when i click them" />
+    <MESSAGE value="added feature where application saves paths of songs loaded in and reloads them again on application start up&#10;need to work on event handlers that handle selecting and changing what song is currently playing" />
+    <option name="LAST_COMMIT_MESSAGE" value="added feature where application saves paths of songs loaded in and reloads them again on application start up&#10;need to work on event handlers that handle selecting and changing what song is currently playing" />
   </component>
 </project>

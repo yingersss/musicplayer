@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 
 public class MainSceneController implements Initializable {
     private MediaPlayer currentPlayer;
+    private Song currentSong;
     private static final String SONG_LIST_FILE = "songs.txt"; // The name of the file to store the song paths
 
     @FXML
@@ -56,33 +57,54 @@ public class MainSceneController implements Initializable {
     @FXML
     private void handlePlayAction() {
         Song selectedSong = songListView.getSelectionModel().getSelectedItem();
-        if (selectedSong != null) {
-            System.out.println("Selected song: " + selectedSong.getFilePath()); // Debug: Check selected file path
-            if (currentPlayer != null) {
-                MediaPlayer.Status status = currentPlayer.getStatus();
-                System.out.println("Current player status: " + status); // Debug: Check current player status
+
+        if (selectedSong == null) return; // No song selected, do nothing.
+
+        if (currentPlayer != null) {
+            MediaPlayer.Status status = currentPlayer.getStatus();
+            if (currentSong != null && selectedSong.equals(currentSong)) {
+                // If the selected song is the same as the current song
                 if (status == MediaPlayer.Status.PLAYING) {
-                    currentPlayer.pause();
-                    setButtonIcon(playButton, "play.png"); // Change to play icon
-                } else {
-                    currentPlayer.play();
-                    setButtonIcon(playButton, "pause.png"); // Change to pause icon
+                    currentPlayer.pause(); // If it's playing, pause it.
+                    setButtonIcon(playButton, "play.png");
+                    return; // Do not proceed further, early exit.
+                } else if (status == MediaPlayer.Status.PAUSED) {
+                    currentPlayer.play(); // If it's paused, resume play.
+                    setButtonIcon(playButton, "pause.png");
+                    return; // Do not proceed further, early exit.
                 }
+                // No need to do anything if status is STOPPED, as a new MediaPlayer will be created.
             } else {
-                try {
-                    Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
-                    currentPlayer = new MediaPlayer(media);
-                    currentPlayer.play();
-                    setButtonIcon(playButton, "pause.png"); // Change to pause icon
-                    System.out.println("Playing new song: " + selectedSong.getFilePath()); // Debug: Confirm new song is playing
-                } catch (Exception e) {
-                    System.err.println("Error playing media: " + e.getMessage()); // Debug: Catch any errors
-                    e.printStackTrace();
-                }
+                // New song selected, stop and dispose of the current player.
+                currentPlayer.stop();
+                currentPlayer.dispose();
+                currentPlayer = null;
+                currentSong = null; // Clear current song as it's different.
             }
         }
+
+        // At this point, either no MediaPlayer was present or a new song was selected.
+        currentSong = selectedSong; // Update the current song.
+        Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
+        currentPlayer = new MediaPlayer(media);
+        setupMediaPlayerEvents();
+        currentPlayer.play();
     }
 
+    private void setupMediaPlayerEvents() {
+        if (currentPlayer != null) {
+            currentPlayer.setOnPlaying(() -> setButtonIcon(playButton, "pause.png"));
+            currentPlayer.setOnPaused(() -> setButtonIcon(playButton, "play.png"));
+            currentPlayer.setOnStopped(() -> setButtonIcon(playButton, "play.png"));
+            currentPlayer.setOnEndOfMedia(() -> {
+                currentPlayer.stop();
+                currentPlayer.dispose();
+                currentPlayer = null;
+                setButtonIcon(playButton, "play.png");
+                currentSong = null; // Reset the current song as playback has finished.
+            });
+        }
+    }
 
     @FXML
     private void handlePreviousAction() {
