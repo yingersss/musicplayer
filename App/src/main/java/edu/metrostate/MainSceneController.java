@@ -73,38 +73,55 @@ public class MainSceneController implements Initializable {
         System.out.println("Play button clicked.");
         Song selectedSong = songListView.getSelectionModel().getSelectedItem();
 
-        if (selectedSong == null) return; // No song selected, do nothing.
-
-        if (currentPlayer != null) {
-            MediaPlayer.Status status = currentPlayer.getStatus();
-            if (currentSong != null && selectedSong.equals(currentSong)) {
-                // If the selected song is the same as the current song
-                if (status == MediaPlayer.Status.PLAYING) {
-                    currentPlayer.pause(); // If it's playing, pause it.
-                    setButtonIcon(playButton, "play.png");
-                    return; // Do not proceed further, early exit.
-                } else if (status == MediaPlayer.Status.PAUSED) {
-                    currentPlayer.play(); // If it's paused, resume play.
-                    setButtonIcon(playButton, "pause.png");
-                    return; // Do not proceed further, early exit.
-                }
-                // No need to do anything if status is STOPPED, as a new MediaPlayer will be created.
-            } else {
-                // New song selected, stop and dispose of the current player.
-                currentPlayer.stop();
-                currentPlayer.dispose();
-                currentPlayer = null;
-                currentSong = null; // Clear current song as it's different.
-            }
+        if (selectedSong == null) {
+            System.out.println("No song selected.");
+            return; // No song selected, do nothing.
         }
-        // At this point, either no MediaPlayer was present or a new song was selected.
-        currentSong = selectedSong; // Update the current song.
-        Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
+
+        // Debug print the song selected
+        System.out.println("Selected song: " + selectedSong.getTrackTitle());
+
+        // Check if the selected song is different from the currently playing song.
+        if (currentPlayer != null && !selectedSong.equals(currentSong)) {
+            System.out.println("Changing from song: " + (currentSong != null ? currentSong.getTrackTitle() : "none") + " to " + selectedSong.getTrackTitle());
+            // If a different song is selected, stop and dispose of the current player.
+            currentPlayer.stop();
+            currentPlayer.dispose();
+            currentPlayer = null;
+            createAndPlayMedia(selectedSong);
+        } else if (currentPlayer == null) {
+            createAndPlayMedia(selectedSong);
+        } else {
+            // If the same song is re-selected, toggle play/pause.
+            togglePlayPause();
+        }
+    }
+
+    private void createAndPlayMedia(Song song) {
+        System.out.println("Creating new MediaPlayer for: " + song.getFilePath());
+        currentSong = song; // Update the current song.
+        Media media = new Media(new File(song.getFilePath()).toURI().toString());
         currentPlayer = new MediaPlayer(media);
         setupMediaPlayerEvents();
-        setupProgressSlider(); // Call this method when MediaPlayer is ready and playing
+        setupProgressSlider();
         currentPlayer.play();
+        setButtonIcon(playButton, "pause.png");  // Set the button to 'pause' since it's now playing.
     }
+
+    private void togglePlayPause() {
+        MediaPlayer.Status status = currentPlayer.getStatus();
+        if (status == MediaPlayer.Status.PLAYING) {
+            System.out.println("Pausing: " + currentSong.getTrackTitle());
+            currentPlayer.pause();
+            setButtonIcon(playButton, "play.png");
+        } else {
+            System.out.println("Resuming: " + currentSong.getTrackTitle());
+            currentPlayer.play();
+            setButtonIcon(playButton, "pause.png");
+        }
+    }
+
+
 
     @FXML
     private void handlePreviousAction() {
@@ -332,12 +349,14 @@ public class MainSceneController implements Initializable {
 
     // method to set a button to show the correct icon (play or pause)
     private void setButtonIcon(Button button, String iconName) {
-        Image img = new Image(getClass().getResourceAsStream("/images/" + iconName));
-        ImageView iconView = new ImageView(img);
-        iconView.setPreserveRatio(true);
-        iconView.setFitWidth(45);
-        iconView.setFitHeight(45);
-        button.setGraphic(iconView);
+        Platform.runLater(() -> {
+            Image img = new Image(getClass().getResourceAsStream("/images/" + iconName));
+            ImageView iconView = new ImageView(img);
+            iconView.setPreserveRatio(true);
+            iconView.setFitWidth(45);
+            iconView.setFitHeight(45);
+            button.setGraphic(iconView);
+        });
     }
     private void loadSongList() {
         Path path = Paths.get(SONG_LIST_FILE);
@@ -469,6 +488,29 @@ public class MainSceneController implements Initializable {
         setupListViewContextMenu();  // Setup context menu for ListView
         songListView.setItems(songObservableList); // Set the items for the ListView using your song list.
 
+        // Listener for song selection in ListView
+        songListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSong, newSong) -> {
+            if (newSong == null) return;
+
+            System.out.println("Song selected from ListView: " + newSong.getTrackTitle());
+
+            // Check if there is an existing media player and if the new song is different from the current song
+            if (currentPlayer != null && !newSong.equals(currentSong)) {
+                System.out.println("Different song selected. Updating button to show play icon.");
+                setButtonIcon(playButton, "play.png"); // Set to 'play' because it's a new song selection
+            } else if (currentPlayer != null && newSong.equals(currentSong)) {
+                // If the selected song is the same as the current and playing, ensure the pause button is shown
+                MediaPlayer.Status status = currentPlayer.getStatus();
+                if (status == MediaPlayer.Status.PLAYING) {
+                    setButtonIcon(playButton, "pause.png");
+                } else {
+                    setButtonIcon(playButton, "play.png");
+                }
+            } else {
+                // No current player or a new player needs to be created
+                setButtonIcon(playButton, "play.png");
+            }
+        });
         // Handle the progress slider interaction for seeking in the current song.
         progressSlider.setOnMousePressed(event -> {
             if (currentPlayer != null) {
