@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -38,7 +39,7 @@ public class MainSceneController implements Initializable {
     private ImageView albumImageView;
     // progress bar on bottom of application
     @FXML
-    private ProgressBar progressBar;
+    private Slider progressSlider;
     // time label
     @FXML
     private Label timeLabel;
@@ -99,7 +100,7 @@ public class MainSceneController implements Initializable {
         Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
         currentPlayer = new MediaPlayer(media);
         setupMediaPlayerEvents();
-        setupProgressBar(); // Call this method when MediaPlayer is ready and playing
+        setupProgressSlider(); // Call this method when MediaPlayer is ready and playing
         currentPlayer.play();
     }
 
@@ -179,6 +180,25 @@ public class MainSceneController implements Initializable {
         updateRepeatButtonIcon();  // Optionally update the button icon or text based on the current mode
     }
 
+    @FXML
+    private void handleSliderMouseClicked(MouseEvent event) {
+
+    }
+    @FXML
+    private void handleSliderMouseReleased(MouseEvent event) {
+        if (currentPlayer != null && currentPlayer.getMedia() != null) {
+            currentPlayer.seek(Duration.seconds(progressSlider.getValue()));
+        }
+    }
+
+    @FXML
+    private void handleSliderDrag(MouseEvent event) {
+        if (currentPlayer != null) {
+            currentPlayer.seek(Duration.seconds(progressSlider.getValue()));
+        }
+    }
+
+
     private void updateRepeatButtonIcon() {
         if (repeatButton == null) {
             System.out.println("Repeat button is not initialized!");
@@ -197,10 +217,6 @@ public class MainSceneController implements Initializable {
                 break;
         }
     }
-    private void initializeProgressBar() {
-        progressBar.setProgress(0); // Set the progress to 0
-    }
-
     private void playSelectedSong() {
         Song selectedSong = songListView.getSelectionModel().getSelectedItem();
         if (selectedSong == null) return; // No song selected, do nothing.
@@ -215,24 +231,25 @@ public class MainSceneController implements Initializable {
         Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
         currentPlayer = new MediaPlayer(media);
         setupMediaPlayerEvents();
-        setupProgressBar();
+        setupProgressSlider();
         currentPlayer.play();
     }
-    private void setupProgressBar() {
+    private void setupProgressSlider() {
         if (currentPlayer != null) {
-            progressBar.progressProperty().unbind();
-            progressBar.setProgress(0);
+            progressSlider.setValue(0); // Set the initial slider value to 0
+
             currentPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
                 javafx.util.Duration currentTime = newValue;
                 javafx.util.Duration totalDuration = currentPlayer.getTotalDuration();
 
                 if (currentPlayer != null && totalDuration != null) {
-                    progressBar.setProgress(currentTime.toMillis() / totalDuration.toMillis());
+                    progressSlider.setValue(currentTime.toMillis() / totalDuration.toMillis() * progressSlider.getMax());
                     updateTimeLabel(currentTime, totalDuration);
                 }
             });
         }
     }
+
     private void updateTimeLabel(javafx.util.Duration currentTime, javafx.util.Duration totalDuration) {
         int currentSeconds = (int) currentTime.toSeconds();
         int totalSeconds = (int) totalDuration.toSeconds();
@@ -257,63 +274,48 @@ public class MainSceneController implements Initializable {
                 System.out.println("MediaPlayer is paused.");
                 setButtonIcon(playButton, "play.png");
             });
-            /*
-            currentPlayer.setOnStopped(() -> {
-                System.out.println("Stopped: " + currentSong.getFilePath());
-                setButtonIcon(playButton, "play.png");
-                progressBar.setProgress(0);
-                cleanupMediaPlayer();
-            });
-             */
+
             currentPlayer.setOnEndOfMedia(() -> {
                 System.out.println("End of media.");
-                int currentIndex = songListView.getSelectionModel().getSelectedIndex();
-                int nextIndex = currentIndex + 1;
-
-                if (nextIndex >= songListView.getItems().size()) { // At end of the list
-                    switch (repeatMode) {
-                        case REPEAT_LIST:
-                            nextIndex = 0;  // Wrap to the start of the list
-                            break;
-                        case REPEAT_SONG:
-                            nextIndex = currentIndex;  // Stay on the current song
-                            break;
-                        default:
-                            return;  // No repeat, do nothing further
-                    }
-                }
-
-                songListView.getSelectionModel().select(nextIndex);
-                playSelectedSong();
+                switch (repeatMode) {
+                    case REPEAT_LIST:
+                        // Move to the next song or wrap to the first song
+                        handleNextAction();
+                        break;
+                    case REPEAT_SONG:
+                        // Replay the same song
+                        currentPlayer.seek(Duration.ZERO);
+                        currentPlayer.play();
+                        System.out.println("Repeating song: " + currentSong.getFilePath());
+                        break;
+                    default:
+                        // If no repeat mode, play next song unless it is last index
+                        handleNextAction();
+                        }
             });
 
-            // This is where you set up the volume control when the MediaPlayer is ready.
             currentPlayer.setOnReady(() -> {
+                // ... [handle ready state]
                 setupVolumeControl();
-                System.out.println("MediaPlayer is ready. Duration: " + currentPlayer.getMedia().getDuration().toSeconds() + " seconds");
-                //currentPlayer.play();
+                progressSlider.setMax(currentPlayer.getTotalDuration().toSeconds());
             });
-        }
-    }
 
-    private void cleanupMediaPlayer() {
-        if (currentPlayer != null) {
-            System.out.println("Disposing MediaPlayer for: " + currentSong.getFilePath());
-            currentPlayer.currentTimeProperty().removeListener((obs, oldTime, newTime) -> {
-                if (currentPlayer != null && currentPlayer.getTotalDuration() != null) {
-                    progressBar.setProgress(newTime.toMillis() / currentPlayer.getTotalDuration().toMillis());
+            currentPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+                if (!progressSlider.isValueChanging()) { // Only update when the user is not interacting
+                    Platform.runLater(() -> {
+                        progressSlider.setValue(newValue.toSeconds());
+                    });
                 }
             });
-            currentPlayer.dispose();
-            currentPlayer = null;
-            currentSong = null; // Reset the current song as playback has finished.
         }
     }
-
     private void setupVolumeControl() {
         if (currentPlayer != null) {
-            volumeSlider.setValue(currentPlayer.getVolume() * 100); // assuming your volumeSlider's max is 100
-            currentPlayer.volumeProperty().bind(volumeSlider.valueProperty().divide(100)); // if your volumeSlider's max is 1, just bind without division
+            // Bind the volume property of MediaPlayer to the value of the volume slider.
+            // This will cause the volume of the MediaPlayer to be updated whenever the slider is moved.
+            currentPlayer.volumeProperty().bind(volumeSlider.valueProperty().divide(100));
+            // Initialize the slider position to the current volume.
+            volumeSlider.setValue(currentPlayer.getVolume() * 100);
         }
     }
 
@@ -411,8 +413,20 @@ public class MainSceneController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadSongList();
-        initializeProgressBar();
-        // Configure the ListView to accept dragged files
+        progressSlider.valueProperty().addListener((obs, oldval, newVal) ->
+                progressSlider.setValue(newVal.intValue()));
+
+        progressSlider.setOnMousePressed(event -> {
+            if (currentPlayer != null && currentPlayer.getMedia() != null) {
+                currentPlayer.seek(Duration.seconds(progressSlider.getValue()));
+            }
+        });
+
+        progressSlider.setOnMouseReleased(event -> {
+            if (currentPlayer != null && currentPlayer.getMedia() != null) {
+                currentPlayer.seek(Duration.seconds(progressSlider.getValue()));
+            }
+        });        // Configure the ListView to accept dragged files
         songListView.setOnDragOver(event -> {
             if (event.getGestureSource() != songListView &&
                     event.getDragboard().hasFiles()) {

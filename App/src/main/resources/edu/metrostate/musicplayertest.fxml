@@ -169,8 +169,8 @@
             <AnchorPane prefHeight="200.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label fx:id="timeLabel" layoutX="7.0" layoutY="18.0" text="0:00 / 0:00" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="1139.0" AnchorPane.topAnchor="18.0" />
-                  <ProgressBar fx:id="progressBar" layoutX="70.0" layoutY="16.0" prefHeight="20.0" prefWidth="938.0" progress="0.33" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="190.0" />
-                  <Slider fx:id="volumeSlider" layoutX="1046.0" layoutY="19.0" max="100" min="0" value="50" />
+                  <Slider fx:id="progressSlider" onMouseReleased="#handleSliderMouseReleased" onMouseDragged="#handleSliderDrag" onMouseClicked="#handleSliderMouseClicked" layoutX="70.0" layoutY="16.0" prefHeight="20.0" prefWidth="938.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="190.0" />
+                  <Slider fx:id="volumeSlider" layoutX="1046.0" layoutY="19.0" value="50" />
                   <ImageView fitHeight="25.0" fitWidth="37.0" layoutX="1015.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@/images/volume.png" />
