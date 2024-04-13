@@ -193,6 +193,10 @@ public class MainSceneController implements Initializable {
     }
 
     @FXML
+    private void handleSliderMouseClicked(MouseEvent event) {
+        // not currently being used
+    }
+    @FXML
     private void handleSliderMouseReleased(MouseEvent event) {
         if (currentPlayer != null && currentPlayer.getMedia() != null) {
             currentPlayer.seek(Duration.seconds(progressSlider.getValue()));
@@ -416,10 +420,53 @@ public class MainSceneController implements Initializable {
             albumImageView.setImage(null);
         }
     }
+    private void setupListViewContextMenu() {
+        // Create a Context Menu
+        ContextMenu contextMenu = new ContextMenu();
+
+        // Create Menu Items
+        MenuItem removeItem = new MenuItem("Remove");
+        contextMenu.getItems().add(removeItem);
+
+        // Set the context menu on the ListView
+        songListView.setContextMenu(contextMenu);
+
+        // Add action handler for the 'Remove' menu item
+        removeItem.setOnAction(event -> {
+            Song selectedSong = songListView.getSelectionModel().getSelectedItem();
+            if (selectedSong != null) {
+                songObservableList.remove(selectedSong);
+            }
+        });
+    }
+    private void addSongToList(File file) {
+        Media media = new Media(file.toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setOnReady(() -> {
+            String title = (String) media.getMetadata().get("title");
+            String artist = (String) media.getMetadata().get("artist");
+            String album = (String) media.getMetadata().get("album");
+            Double duration = media.getDuration().toSeconds();
+            Image albumImage = (Image) media.getMetadata().get("image");
+
+            if (title == null || title.isEmpty()) {
+                title = file.getName().substring(0, file.getName().lastIndexOf('.'));
+            }
+
+            Song song = new Song(title, artist, album, duration, "Unknown Genre", file.getAbsolutePath());
+            song.setAlbumImage(albumImage);
+            Platform.runLater(() -> {
+                songObservableList.add(song);
+            });
+            mediaPlayer.dispose();
+        });
+        mediaPlayer.play();  // Note: You might not want to play the song immediately upon adding. Consider removing this line if not needed.
+    }
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadSongList();
+        setupListViewContextMenu();  // Setup context menu for ListView
         songListView.setItems(songObservableList); // Set the items for the ListView using your song list.
 
         // Handle the progress slider interaction for seeking in the current song.
@@ -460,8 +507,11 @@ public class MainSceneController implements Initializable {
             boolean success = false;
             if (db.hasFiles()) {
                 success = true;
-                // Your logic to handle file drop.
-                // ...
+                for (File file : db.getFiles()) {
+                    if (file.getName().toLowerCase().endsWith(".mp3")) {
+                        addSongToList(file);
+                    }
+                }
             }
             event.setDropCompleted(success);
             event.consume();
@@ -472,11 +522,7 @@ public class MainSceneController implements Initializable {
             @Override
             protected void updateItem(Song song, boolean empty) {
                 super.updateItem(song, empty);
-                if (empty || song == null) {
-                    setText(null);
-                } else {
-                    setText(song.getTrackTitle());
-                }
+                setText(empty || song == null ? null : song.getTrackTitle());
             }
         });
 
