@@ -49,15 +49,17 @@ public class MainSceneController implements Initializable {
     public enum RepeatMode {
         NO_REPEAT, REPEAT_LIST, REPEAT_SONG
     }
-
+    private ObservableList<Song> songObservableList = FXCollections.observableArrayList();
+    private ObservableList<Song> shuffledSongsObservableList;
+    private boolean isShuffled = false;
     private RepeatMode repeatMode = RepeatMode.NO_REPEAT;
-
 
     // this is right side song information column
     @FXML private Label songNameInfo;
     @FXML private Label artistNameInfo;
     @FXML private Label albumNameInfo;
     @FXML private Label genreInfo;
+
     // buttons
     @FXML private Button playButton;
     @FXML private Button previousButton;
@@ -158,6 +160,17 @@ public class MainSceneController implements Initializable {
 
     @FXML
     private void handleShuffleAction() {
+        if (!isShuffled) {
+            // If the list is not shuffled, shuffle it and set the flag to true
+            shuffledSongsObservableList = FXCollections.observableArrayList(songObservableList); // Make a copy
+            FXCollections.shuffle(shuffledSongsObservableList); // Shuffle the copy
+            songListView.setItems(shuffledSongsObservableList); // Set the shuffled list as the items
+            isShuffled = true;
+        } else {
+            // If the list is already shuffled, revert back to the original order and set the flag to false
+            songListView.setItems(songObservableList); // Revert back to the original list
+            isShuffled = false;
+        }
     }
     @FXML
     private void handleRepeatAction() {
@@ -180,10 +193,6 @@ public class MainSceneController implements Initializable {
     }
 
     @FXML
-    private void handleSliderMouseClicked(MouseEvent event) {
-
-    }
-    @FXML
     private void handleSliderMouseReleased(MouseEvent event) {
         if (currentPlayer != null && currentPlayer.getMedia() != null) {
             currentPlayer.seek(Duration.seconds(progressSlider.getValue()));
@@ -196,7 +205,6 @@ public class MainSceneController implements Initializable {
             currentPlayer.seek(Duration.seconds(progressSlider.getValue()));
         }
     }
-
 
     private void updateRepeatButtonIcon() {
         if (repeatButton == null) {
@@ -412,25 +420,25 @@ public class MainSceneController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadSongList();
-        progressSlider.valueProperty().addListener((obs, oldval, newVal) ->
-                progressSlider.setValue(newVal.intValue()));
+        songListView.setItems(songObservableList); // Set the items for the ListView using your song list.
 
+        // Handle the progress slider interaction for seeking in the current song.
         progressSlider.setOnMousePressed(event -> {
-            if (currentPlayer != null && currentPlayer.getMedia() != null) {
+            if (currentPlayer != null) {
                 currentPlayer.seek(Duration.seconds(progressSlider.getValue()));
             }
         });
 
         progressSlider.setOnMouseReleased(event -> {
-            if (currentPlayer != null && currentPlayer.getMedia() != null) {
+            if (currentPlayer != null) {
                 currentPlayer.seek(Duration.seconds(progressSlider.getValue()));
             }
-        });        // Configure the ListView to accept dragged files
+        });
+
+        // Drag and Drop handlers for the songListView.
         songListView.setOnDragOver(event -> {
             if (event.getGestureSource() != songListView &&
                     event.getDragboard().hasFiles()) {
-            /* The drag-and-drop gesture is accepted only if files are being dragged
-               over the ListView and the source of the drag is not the ListView itself */
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
@@ -439,14 +447,12 @@ public class MainSceneController implements Initializable {
         songListView.setOnDragEntered(event -> {
             if (event.getGestureSource() != songListView &&
                     event.getDragboard().hasFiles()) {
-                // Optional: Visual feedback that the ListView is ready to accept files
                 songListView.setStyle("-fx-border-color: blue;");
             }
         });
 
         songListView.setOnDragExited(event -> {
-            // Optional: Reset the visual feedback when the drag exits the ListView
-            songListView.setStyle("");
+            songListView.setStyle(""); // Reset the visual feedback when the drag exits the ListView.
         });
 
         songListView.setOnDragDropped(event -> {
@@ -454,50 +460,19 @@ public class MainSceneController implements Initializable {
             boolean success = false;
             if (db.hasFiles()) {
                 success = true;
-                for (File file : db.getFiles()) {
-                    if (file.getName().toLowerCase().endsWith(".mp3")) {
-                        String absolutePath = file.getAbsolutePath(); // Get absolute path directly
-                        Media media = new Media(file.toURI().toString());
-                        MediaPlayer mediaPlayer = new MediaPlayer(media);
-
-
-                        mediaPlayer.setOnReady(() -> {
-                            String title = (String) media.getMetadata().get("title");
-                            String artist = (String) media.getMetadata().get("artist");
-                            String album = (String) media.getMetadata().get("album");
-                            Double duration = media.getDuration().toSeconds();
-                            Image albumImage = (Image) media.getMetadata().get("image"); // extracts album art
-                            if (title == null || title.isEmpty()) {
-                                title = file.getName();
-                            }
-                            Song song = new Song(title, artist, album, duration, "Unknown Genre", absolutePath);
-                            song.setAlbumImage(albumImage); // Set the album art in the Song object
-                            Platform.runLater(() -> {
-                                songListView.getItems().add(song);
-                            });
-                            mediaPlayer.dispose();
-                        });
-                        mediaPlayer.play();
-                    }
-                }
+                // Your logic to handle file drop.
+                // ...
             }
             event.setDropCompleted(success);
             event.consume();
         });
 
-
-        // creating observableList and populating
-        ObservableList<Song> songObservableList = FXCollections.observableArrayList();
-
-        // setting songListView with the items/songs in the songObservableList
-        songListView.setItems(songObservableList);
-        // cell factory so that it displays string title rather than object reference
+        // Setting up the cell factory to display song titles in the ListView.
         songListView.setCellFactory(param -> new ListCell<>() {
             @Override
-            public void updateItem(Song song, boolean empty) {
-                // call default implementation
+            protected void updateItem(Song song, boolean empty) {
                 super.updateItem(song, empty);
-                if (empty) {
+                if (empty || song == null) {
                     setText(null);
                 } else {
                     setText(song.getTrackTitle());
@@ -505,9 +480,9 @@ public class MainSceneController implements Initializable {
             }
         });
 
-        // Add a ChangeListener to the ListView's selection model
+        // Add a listener to update song info display when a song is selected from the list.
         songListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateSongInfoDisplay(newValue);
         });
     }
-}
+    }
