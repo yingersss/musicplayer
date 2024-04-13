@@ -131,7 +131,6 @@ public class MainSceneController implements Initializable {
             playSelectedSong();
         }
     }
-
     @FXML
     private void handleNextAction() {
         if (songListView.getItems().isEmpty()) {
