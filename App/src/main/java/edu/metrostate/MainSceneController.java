@@ -13,16 +13,15 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -45,6 +44,12 @@ public class MainSceneController implements Initializable {
     private Label timeLabel;
     @FXML
     private Slider volumeSlider;
+    private float volume;
+    public enum RepeatMode {
+        NO_REPEAT, REPEAT_LIST, REPEAT_SONG
+    }
+
+    private RepeatMode repeatMode = RepeatMode.NO_REPEAT;
 
 
     // this is right side song information column
@@ -62,6 +67,7 @@ public class MainSceneController implements Initializable {
     // action handlers
     @FXML
     private void handlePlayAction() {
+        System.out.println("Play button clicked.");
         Song selectedSong = songListView.getSelectionModel().getSelectedItem();
 
         if (selectedSong == null) return; // No song selected, do nothing.
@@ -97,23 +103,121 @@ public class MainSceneController implements Initializable {
         currentPlayer.play();
     }
 
-    private void initializeProgressBar() {
-        progressBar.setProgress(0); // Set the progress to 0
+    @FXML
+    private void handlePreviousAction() {
+        System.out.println("Previous button clicked.");
+        if (songListView.getItems().isEmpty()) {
+            // no songs in the list, do nothing
+            return;
+        }
+
+        // checks if more than 3 seconds have been played
+        if (currentPlayer != null && currentPlayer.getCurrentTime().greaterThan(javafx.util.Duration.seconds(3))) {
+            System.out.println("Rewinding current song.");
+            // Rewind the current song
+            currentPlayer.seek(javafx.util.Duration.ZERO);
+        } else {
+            // otherwise, select the previous song
+            int currentIndex = songListView.getSelectionModel().getSelectedIndex();
+            int previousIndex = currentIndex - 1;
+            if (previousIndex < 0) {
+                // if the current index is the first song, wrap around to the last song in the list
+                previousIndex = songListView.getItems().size() - 1;
+            }
+            songListView.getSelectionModel().select(previousIndex);
+
+            // plays the newly selected song
+            playSelectedSong();
+        }
     }
 
     @FXML
-    private void handlePreviousAction() {
-    }
-    @FXML
     private void handleNextAction() {
+        if (songListView.getItems().isEmpty()) {
+            return;
+        }
+        int currentIndex = songListView.getSelectionModel().getSelectedIndex();
+        int nextIndex = currentIndex + 1;
+
+        if (nextIndex >= songListView.getItems().size()) { // At end of the list
+            switch (repeatMode) {
+                case REPEAT_LIST:
+                    nextIndex = 0;  // Wrap to the start of the list
+                    break;
+                case REPEAT_SONG:
+                    nextIndex = currentIndex;  // Stay on the current song
+                    break;
+                default:
+                    return;  // No repeat, do nothing further
+            }
+        }
+
+        songListView.getSelectionModel().select(nextIndex);
+        playSelectedSong();
     }
+
     @FXML
     private void handleShuffleAction() {
     }
     @FXML
     private void handleRepeatAction() {
+        // Cycle through the repeat modes
+        switch (repeatMode) {
+            case NO_REPEAT:
+                repeatMode = RepeatMode.REPEAT_LIST;
+                System.out.println("Repeat mode set to: REPEAT_LIST");
+                break;
+            case REPEAT_LIST:
+                repeatMode = RepeatMode.REPEAT_SONG;
+                System.out.println("Repeat mode set to: REPEAT_SONG");
+                break;
+            case REPEAT_SONG:
+                repeatMode = RepeatMode.NO_REPEAT;
+                System.out.println("Repeat mode set to: NO_REPEAT");
+                break;
+        }
+        updateRepeatButtonIcon();  // Optionally update the button icon or text based on the current mode
     }
 
+    private void updateRepeatButtonIcon() {
+        if (repeatButton == null) {
+            System.out.println("Repeat button is not initialized!");
+            return;
+        }
+
+        switch (repeatMode) {
+            case NO_REPEAT:
+                setButtonIcon(repeatButton, "repeat.png");
+                break;
+            case REPEAT_LIST:
+                setButtonIcon(repeatButton, "repeat_2.png");
+                break;
+            case REPEAT_SONG:
+                setButtonIcon(repeatButton, "repeat_3.png");
+                break;
+        }
+    }
+    private void initializeProgressBar() {
+        progressBar.setProgress(0); // Set the progress to 0
+    }
+
+    private void playSelectedSong() {
+        Song selectedSong = songListView.getSelectionModel().getSelectedItem();
+        if (selectedSong == null) return; // No song selected, do nothing.
+
+        if (currentPlayer != null) { // disposes the currentPlayer
+            currentPlayer.stop();
+            currentPlayer.dispose();
+        }
+        System.out.println("Creating MediaPlayer for: " + selectedSong.getFilePath());
+        currentSong = selectedSong; // Update the current song
+        System.out.println(selectedSong.getFilePath());
+        Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
+        currentPlayer = new MediaPlayer(media);
+        setupMediaPlayerEvents();
+        setupProgressBar();
+        currentPlayer.play();
+    }
     private void setupProgressBar() {
         if (currentPlayer != null) {
             progressBar.progressProperty().unbind();
@@ -139,28 +243,62 @@ public class MainSceneController implements Initializable {
     }
     private void setupMediaPlayerEvents() {
         if (currentPlayer != null) {
-            currentPlayer.setOnPlaying(() -> setButtonIcon(playButton, "pause.png"));
-            currentPlayer.setOnPaused(() -> setButtonIcon(playButton, "play.png"));
+            currentPlayer.setOnError(() -> {
+                System.out.println("Error with: " + currentSong.getFilePath());
+                System.out.println(currentPlayer.getError().getMessage());
+            });
+
+            currentPlayer.setOnPlaying(() -> {
+                System.out.println("Playing: " + currentSong.getFilePath());
+                setButtonIcon(playButton, "pause.png");
+            });
+
+            currentPlayer.setOnPaused(() -> {
+                System.out.println("MediaPlayer is paused.");
+                setButtonIcon(playButton, "play.png");
+            });
+            /*
             currentPlayer.setOnStopped(() -> {
+                System.out.println("Stopped: " + currentSong.getFilePath());
                 setButtonIcon(playButton, "play.png");
                 progressBar.setProgress(0);
                 cleanupMediaPlayer();
             });
+             */
             currentPlayer.setOnEndOfMedia(() -> {
-                setButtonIcon(playButton, "play.png");
-                progressBar.setProgress(1);
-                cleanupMediaPlayer();
+                System.out.println("End of media.");
+                int currentIndex = songListView.getSelectionModel().getSelectedIndex();
+                int nextIndex = currentIndex + 1;
+
+                if (nextIndex >= songListView.getItems().size()) { // At end of the list
+                    switch (repeatMode) {
+                        case REPEAT_LIST:
+                            nextIndex = 0;  // Wrap to the start of the list
+                            break;
+                        case REPEAT_SONG:
+                            nextIndex = currentIndex;  // Stay on the current song
+                            break;
+                        default:
+                            return;  // No repeat, do nothing further
+                    }
+                }
+
+                songListView.getSelectionModel().select(nextIndex);
+                playSelectedSong();
             });
 
             // This is where you set up the volume control when the MediaPlayer is ready.
             currentPlayer.setOnReady(() -> {
                 setupVolumeControl();
+                System.out.println("MediaPlayer is ready. Duration: " + currentPlayer.getMedia().getDuration().toSeconds() + " seconds");
+                //currentPlayer.play();
             });
         }
     }
 
     private void cleanupMediaPlayer() {
         if (currentPlayer != null) {
+            System.out.println("Disposing MediaPlayer for: " + currentSong.getFilePath());
             currentPlayer.currentTimeProperty().removeListener((obs, oldTime, newTime) -> {
                 if (currentPlayer != null && currentPlayer.getTotalDuration() != null) {
                     progressBar.setProgress(newTime.toMillis() / currentPlayer.getTotalDuration().toMillis());
@@ -184,8 +322,8 @@ public class MainSceneController implements Initializable {
         Image img = new Image(getClass().getResourceAsStream("/images/" + iconName));
         ImageView iconView = new ImageView(img);
         iconView.setPreserveRatio(true);
-        iconView.setFitWidth(40);
-        iconView.setFitHeight(40);
+        iconView.setFitWidth(45);
+        iconView.setFitHeight(45);
         button.setGraphic(iconView);
     }
     private void loadSongList() {
@@ -225,15 +363,6 @@ public class MainSceneController implements Initializable {
                 e.printStackTrace();
             }
         }
-    }
-
-    private Song createSongFromMedia(MediaPlayer mediaPlayer, File file) {
-        String title = (String) mediaPlayer.getMedia().getMetadata().get("title");
-        String artist = (String) mediaPlayer.getMedia().getMetadata().get("artist");
-        String album = (String) mediaPlayer.getMedia().getMetadata().get("album");
-        Double duration = mediaPlayer.getMedia().getDuration().toSeconds();
-        if (title == null || title.isEmpty()) title = file.getName();
-        return new Song(title, artist, album, duration, "Unknown Genre", file.getAbsolutePath());
     }
 
     private void saveSongList() {
