@@ -210,23 +210,28 @@ public class MainSceneController implements Initializable {
 
     @FXML
     private void handleShuffleAction() {
+        Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
+        ObservableList<Song> currentList = selectedPlaylist != null ? selectedPlaylist.getSongs() : masterSongList;
+
         if (!isShuffled) {
-            // If the list is not shuffled, shuffle it and set the flag to true
-            shuffledSongsObservableList = FXCollections.observableArrayList(songObservableList); // Make a copy
-            FXCollections.shuffle(shuffledSongsObservableList); // Shuffle the copy
-            songListView.setItems(shuffledSongsObservableList); // Set the shuffled list as the items
+            // Backup the current list
+            shuffledSongsObservableList = FXCollections.observableArrayList(currentList);
+            // Shuffle the copy
+            FXCollections.shuffle(shuffledSongsObservableList);
+            // Set the shuffled list as the items
+            songListView.setItems(shuffledSongsObservableList);
             isShuffled = true;
             setButtonIcon(shuffleButton, "shuffle_2.png");
             System.out.println("Shuffle Mode On.");
         } else {
-            // If the list is already shuffled, revert back to the original order and set the flag to false
-            songListView.setItems(songObservableList); // Revert back to the original list
+            // Revert back to the original list
+            songListView.setItems(currentList);
             isShuffled = false;
             setButtonIcon(shuffleButton, "shuffle.png");
             System.out.println("Shuffle Mode Off.");
-
         }
     }
+
     @FXML
     private void handleRepeatAction() {
         // Cycle through the repeat modes
@@ -613,23 +618,6 @@ public class MainSceneController implements Initializable {
         });
         mediaPlayer.play();  // Note: You might not want to play the song immediately upon adding. Consider removing this line if not needed.
     }
-    private Playlist showPlaylistSelectionDialog() {
-        // Get all playlist names for the choice dialog
-        List<Playlist> choices = new ArrayList<>(playlists);
-
-        // Create a new choice dialog with the first item selected by default
-        ChoiceDialog<Playlist> dialog = new ChoiceDialog<>(choices.get(0), choices);
-        dialog.setTitle("Select Playlist");
-        dialog.setHeaderText("Add song to playlist");
-        dialog.setContentText("Choose a playlist:");
-
-        // Show the dialog and wait for the user's choice
-        Optional<Playlist> result = dialog.showAndWait();
-
-        // Return the selected playlist, or null if no selection was made
-        return result.orElse(null);
-    }
-
 
     private void loadPlaylist(Playlist playlist) {
         songListView.setItems(playlist.getSongs());
@@ -710,6 +698,7 @@ public class MainSceneController implements Initializable {
         Optional<String> result = dialog.showAndWait();
         return result.orElse(null); // Return the string, or null if cancelled
     }
+
     private void displayMasterLibrary() {
         if (masterSongList.isEmpty()) {
             System.out.println("Master song list is empty.");
@@ -720,8 +709,6 @@ public class MainSceneController implements Initializable {
         songListView.setItems(masterSongList);
         songListView.refresh(); // Force the ListView to refresh its display
     }
-
-
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadMasterSongList();
