@@ -52,10 +52,4 @@ public class Song extends Track{
     public Image getAlbumImage() {
         return albumImage;
     }
-    public static Song createFromFilePath(String filePath) {
-        // Here you would parse the MP3 file to get metadata like title, artist, etc.
-        // For simplicity, we're just using dummy data.
-        return new Song("Song Title", "Artist", "Genre", 240, "Album", filePath);
-    }
-
 }

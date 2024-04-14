@@ -308,13 +308,12 @@ public class MainSceneController implements Initializable {
         if (currentPlayer == null) return;
 
         currentPlayer.setOnError(() -> {
-            String filePath = (currentSong != null) ? currentSong.getFilePath() : "unknown";
-            System.out.println("Error with: " + filePath);
+            System.out.println("Error with: " + currentSong.getFilePath());
             System.out.println(currentPlayer.getError().getMessage());
         });
 
         currentPlayer.setOnPlaying(() -> {
-            System.out.println("Playing: " + (currentSong != null ? currentSong.getFilePath() : "unknown path"));
+            System.out.println("Playing: " + currentSong.getFilePath());
             setButtonIcon(playButton, "pause.png");
         });
 
