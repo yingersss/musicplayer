@@ -45,7 +45,6 @@ public class MainSceneController implements Initializable {
     private Label timeLabel;
     @FXML
     private Slider volumeSlider;
-    private float volume;
     public enum RepeatMode {
         NO_REPEAT, REPEAT_LIST, REPEAT_SONG
     }
@@ -88,36 +87,30 @@ public class MainSceneController implements Initializable {
             currentPlayer.stop();
             currentPlayer.dispose();
             currentPlayer = null;
-            createAndPlayMedia(selectedSong);
-        } else if (currentPlayer == null) {
-            createAndPlayMedia(selectedSong);
+            setButtonIcon(playButton, "play.png");  // Update the button icon to 'play' since a new song is selected.
+        }
+
+        if (currentPlayer == null) {
+            System.out.println("Creating new MediaPlayer for: " + selectedSong.getFilePath());
+            currentSong = selectedSong; // Update the current song.
+            Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
+            currentPlayer = new MediaPlayer(media);
+            setupMediaPlayerEvents();
+            setupProgressSlider();
+            currentPlayer.play();
+            setButtonIcon(playButton, "pause.png");  // Set the button to 'pause' since it's now playing.
         } else {
             // If the same song is re-selected, toggle play/pause.
-            togglePlayPause();
-        }
-    }
-
-    private void createAndPlayMedia(Song song) {
-        System.out.println("Creating new MediaPlayer for: " + song.getFilePath());
-        currentSong = song; // Update the current song.
-        Media media = new Media(new File(song.getFilePath()).toURI().toString());
-        currentPlayer = new MediaPlayer(media);
-        setupMediaPlayerEvents();
-        setupProgressSlider();
-        currentPlayer.play();
-        setButtonIcon(playButton, "pause.png");  // Set the button to 'pause' since it's now playing.
-    }
-
-    private void togglePlayPause() {
-        MediaPlayer.Status status = currentPlayer.getStatus();
-        if (status == MediaPlayer.Status.PLAYING) {
-            System.out.println("Pausing: " + currentSong.getTrackTitle());
-            currentPlayer.pause();
-            setButtonIcon(playButton, "play.png");
-        } else {
-            System.out.println("Resuming: " + currentSong.getTrackTitle());
-            currentPlayer.play();
-            setButtonIcon(playButton, "pause.png");
+            MediaPlayer.Status status = currentPlayer.getStatus();
+            if (status == MediaPlayer.Status.PLAYING) {
+                System.out.println("Pausing: " + currentSong.getTrackTitle());
+                currentPlayer.pause();
+                setButtonIcon(playButton, "play.png");
+            } else if (status == MediaPlayer.Status.PAUSED) {
+                System.out.println("Resuming: " + currentSong.getTrackTitle());
+                currentPlayer.play();
+                setButtonIcon(playButton, "pause.png");
+            }
         }
     }
 
