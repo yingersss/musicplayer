@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="fixed the previously mentioned bug">
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="implemented a search bar via textField">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,7 +304,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713133857353</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="implemented a search bar via textField">
+      <option name="closed" value="true" />
+      <created>1713135666135</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1713135666135</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -333,6 +339,7 @@
     <MESSAGE value="shuffle button now becomes green upon turning it on and vice versa" />
     <MESSAGE value="shuffle button now works for playlist songs but bug occurs when shuffle mode is on and selecting different playlist or view all songs and reclicking shuffle" />
     <MESSAGE value="fixed the previously mentioned bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed the previously mentioned bug" />
+    <MESSAGE value="implemented a search bar via textField" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented a search bar via textField" />
   </component>
 </project>

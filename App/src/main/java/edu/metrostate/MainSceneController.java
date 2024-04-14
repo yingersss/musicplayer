@@ -626,6 +626,53 @@ public class MainSceneController implements Initializable {
             }
         });
     }
+
+    private void setupPlaylistListViewContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem createPlaylistItem = new MenuItem("Create Playlist");
+        createPlaylistItem.setOnAction(event -> createPlaylist());
+
+        MenuItem removePlaylistItem = new MenuItem("Remove Playlist");
+        removePlaylistItem.setOnAction(event -> deleteSelectedPlaylist());
+
+        MenuItem renamePlaylistItem = new MenuItem("Rename Playlist");
+        renamePlaylistItem.setOnAction(event -> renameSelectedPlaylist());
+
+
+        contextMenu.getItems().addAll(createPlaylistItem, removePlaylistItem, renamePlaylistItem);
+
+        // Set the context menu on the playlistListView
+        playlistListView.setContextMenu(contextMenu);
+    }
+
+    private void deleteSelectedPlaylist() {
+        Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
+        if (selectedPlaylist != null && showAlertConfirmation("Delete Playlist", "Are you sure you want to delete the playlist: " + selectedPlaylist.getName() + "?")) {
+            playlists.remove(selectedPlaylist);
+        }
+    }
+
+    private void renameSelectedPlaylist() {
+        Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
+        if (selectedPlaylist != null) {
+            String newName = promptForPlaylistName("Rename Playlist");
+            if (newName != null && !newName.isEmpty()) {
+                selectedPlaylist.setName(newName);
+                playlistListView.refresh(); // To update the ListView display
+            }
+        }
+    }
+
+    private boolean showAlertConfirmation(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.filter(buttonType -> buttonType == ButtonType.OK).isPresent();
+    }
     private void addSongToList(File file) {
         Media media = new Media(file.toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -761,6 +808,7 @@ public class MainSceneController implements Initializable {
 
 
         setupListViewContextMenu();  // Setup context menu for ListView
+        setupPlaylistListViewContextMenu(); // setup context menu for playlistview
         songListView.setItems(songObservableList); // Set the items for the ListView using your song list.
 
         // Listener for song selection in ListView
