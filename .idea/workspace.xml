@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="volume now persists through each selected song but getting some errors when sliding volume slider in the logs but still works">
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="fixed issue where clicking pause wouldnt pause the current song">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/songs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/songs.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,7 +240,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713076566623</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="fixed issue where clicking pause wouldnt pause the current song">
+      <option name="closed" value="true" />
+      <created>1713079544489</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1713079544489</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -260,6 +267,7 @@
     <MESSAGE value="can now right click remove songs" />
     <MESSAGE value="when selecting other songs while one song is playing, playbutton now shows play instead of pause&#10;&#10;also refactored some code for cleaner code" />
     <MESSAGE value="volume now persists through each selected song but getting some errors when sliding volume slider in the logs but still works" />
-    <option name="LAST_COMMIT_MESSAGE" value="volume now persists through each selected song but getting some errors when sliding volume slider in the logs but still works" />
+    <MESSAGE value="fixed issue where clicking pause wouldnt pause the current song" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed issue where clicking pause wouldnt pause the current song" />
   </component>
 </project>

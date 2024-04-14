@@ -90,6 +90,7 @@ public class MainSceneController implements Initializable {
             currentPlayer = null;
             createAndPlayMedia(selectedSong);
         } else if (currentPlayer == null) {
+            System.out.println("Debug: MediaPlayer is null, creating new player.");
             createAndPlayMedia(selectedSong);
         } else {
             // If the same song is re-selected, toggle play/pause.
@@ -98,16 +99,22 @@ public class MainSceneController implements Initializable {
     }
 
     private void createAndPlayMedia(Song song) {
-        if (song == null) return;
+        if (song == null) {
+            System.out.println("Debug: Song is null and cannot play.");
+            return;
+        }
+
         System.out.println("Creating new MediaPlayer for: " + song.getFilePath());
 
         currentSong = song; // Ensure this is set before any operation that might need it
 
         if (currentPlayer != null) {
+            System.out.println("Debug: Stopping and disposing current MediaPlayer.");
             currentPlayer.stop();
             currentPlayer.dispose();
         }
 
+        System.out.println("Debug: Creating MediaPlayer for song: " + song.getFilePath());
         Media media = new Media(new File(song.getFilePath()).toURI().toString());
         currentPlayer = new MediaPlayer(media);
         currentPlayer.setOnReady(() -> {
@@ -117,18 +124,18 @@ public class MainSceneController implements Initializable {
         setupMediaPlayerEvents(); // Set up media player events
         setupProgressSlider();
         currentPlayer.play();
+        System.out.println("Debug: MediaPlayer created and playing.");
         setButtonIcon(playButton, "pause.png");
     }
-    private void bindVolume(MediaPlayer player) {
-        volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (player != null) {
-                player.setVolume(newVal.doubleValue());
-            }
-        });
-    }
+
 
 
     private void togglePlayPause() {
+        if (currentPlayer == null) {
+            System.out.println("Debug: MediaPlayer is null in togglePlayPause.");
+            return;
+        }
+
         MediaPlayer.Status status = currentPlayer.getStatus();
         if (status == MediaPlayer.Status.PLAYING) {
             System.out.println("Pausing: " + currentSong.getTrackTitle());
@@ -168,6 +175,7 @@ public class MainSceneController implements Initializable {
             playSelectedSong();
         }
     }
+
     @FXML
     private void handleNextAction() {
         if (songListView.getItems().isEmpty()) {
@@ -305,7 +313,10 @@ public class MainSceneController implements Initializable {
         timeLabel.setText(timeText);
     }
     private void setupMediaPlayerEvents() {
-        if (currentPlayer == null) return;
+        if (currentPlayer == null) {
+            System.out.println("Debug: MediaPlayer is null in setUpMediaPlayerEvents.");
+            return;
+        }
 
         currentPlayer.setOnError(() -> {
             System.out.println("Error with: " + currentSong.getFilePath());
@@ -584,4 +595,4 @@ public class MainSceneController implements Initializable {
         // Add a listener to update song info display when a song is selected from the list.
         songListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateSongInfoDisplay(newValue));
     }
-    }
+}
