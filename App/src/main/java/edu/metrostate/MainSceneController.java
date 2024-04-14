@@ -453,8 +453,6 @@ public class MainSceneController implements Initializable {
             }
         }
     }
-
-
     public void createSongFromFile(File file, SongReadyCallback callback) {
         Media media = new Media(file.toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -465,12 +463,13 @@ public class MainSceneController implements Initializable {
             String album = (String) media.getMetadata().get("album");
             double duration = media.getDuration().toSeconds();
             Image albumImage = (Image) media.getMetadata().get("image");
+            String genre = (String) media.getMetadata().get("genre");
 
             if (title == null || title.isEmpty()) {
                 title = file.getName().substring(0, file.getName().lastIndexOf('.'));
             }
 
-            Song song = new Song(title, artist, album, duration, "Unknown Genre", file.getAbsolutePath());
+            Song song = new Song(title, artist, album, duration, genre, file.getAbsolutePath());
             song.setAlbumImage(albumImage);
             mediaPlayer.dispose();
 
@@ -682,12 +681,13 @@ public class MainSceneController implements Initializable {
             String album = (String) media.getMetadata().get("album");
             Double duration = media.getDuration().toSeconds();
             Image albumImage = (Image) media.getMetadata().get("image");
+            String genre = (String) media.getMetadata().get("genre");
 
             if (title == null || title.isEmpty()) {
                 title = file.getName().substring(0, file.getName().lastIndexOf('.'));
             }
 
-            Song song = new Song(title, artist, album, duration, "Unknown Genre", file.getAbsolutePath());
+            Song song = new Song(title, artist, album, duration, genre, file.getAbsolutePath());
             song.setAlbumImage(albumImage);
             Platform.runLater(() -> {
                 songObservableList.add(song);
