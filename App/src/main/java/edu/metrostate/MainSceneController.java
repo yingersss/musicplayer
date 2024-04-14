@@ -33,6 +33,8 @@ public class MainSceneController implements Initializable {
 
     // left side column song listview
     @FXML
+    private TextField searchField;
+    @FXML
     private ListView<Song> songListView;
     @FXML
     private ListView<Playlist> playlistListView;
@@ -71,6 +73,24 @@ public class MainSceneController implements Initializable {
 
     // action handlers
     @FXML
+    private void handleSearchKeyReleased() {
+        String searchText = searchField.getText().toLowerCase();
+        if (searchText.isEmpty()) {
+            songListView.setItems(masterSongList);  // resets to full list if search is cleared
+        } else {
+            ObservableList<Song> filteredSongs = FXCollections.observableArrayList();
+            for (Song song : masterSongList) {
+                // adds songs that contain the searchText into the filteredSongs list
+                if (song.getTrackTitle().toLowerCase().contains(searchText)) {
+                    filteredSongs.add(song);
+                }
+            }
+            // we then set the songListView to show filteredSongs
+            songListView.setItems(filteredSongs);
+        }
+    }
+
+    @FXML
     private void handleViewAllSongsAction() {
         // Check if the list is shuffled, if so, reset it
         if (isShuffled) {
@@ -91,7 +111,7 @@ public class MainSceneController implements Initializable {
     }
 
 
-        @FXML
+    @FXML
     private void handlePlayAction() {
         System.out.println("Play button clicked.");
         Song selectedSong = songListView.getSelectionModel().getSelectedItem();

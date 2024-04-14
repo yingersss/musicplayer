@@ -10,6 +10,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -41,6 +42,21 @@
       </MenuBar>
       <VBox layoutY="26.0" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="371.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="800.0" AnchorPane.topAnchor="29.0">
          <children>
+            <HBox alignment="CENTER_LEFT" spacing="5">
+               <ImageView fitHeight="20" fitWidth="20" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@/images/search.png" />
+                  </image>
+                  <HBox.margin>
+                     <Insets left="180.0" />
+                  </HBox.margin>
+               </ImageView>
+               <TextField fx:id="searchField" maxWidth="-Infinity" onKeyReleased="#handleSearchKeyReleased" prefHeight="25.0" prefWidth="219.0">
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+               </TextField>
+            </HBox>
             <Label text="SONG LIST" textAlignment="CENTER">
                <padding>
                   <Insets left="7.0" />
@@ -72,7 +88,6 @@
                   </FXCollections>
                </items>
             </ListView>
-
          </children>
       </VBox>
       <VBox layoutX="400.0" prefHeight="400.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="800.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">

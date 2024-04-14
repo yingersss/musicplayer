@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="shuffle button now works for playlist songs but bug occurs when shuffle mode is on and selecting different playlist or view all songs and reclicking shuffle">
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="fixed the previously mentioned bug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,7 +298,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713131110690</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="fixed the previously mentioned bug">
+      <option name="closed" value="true" />
+      <created>1713133857353</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1713133857353</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -323,6 +332,7 @@
     <MESSAGE value="playlists now save via a txt file and load up on application startup" />
     <MESSAGE value="shuffle button now becomes green upon turning it on and vice versa" />
     <MESSAGE value="shuffle button now works for playlist songs but bug occurs when shuffle mode is on and selecting different playlist or view all songs and reclicking shuffle" />
-    <option name="LAST_COMMIT_MESSAGE" value="shuffle button now works for playlist songs but bug occurs when shuffle mode is on and selecting different playlist or view all songs and reclicking shuffle" />
+    <MESSAGE value="fixed the previously mentioned bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed the previously mentioned bug" />
   </component>
 </project>
