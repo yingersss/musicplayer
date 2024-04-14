@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="added debugging print statements but still do not know where the nullpointerexception is">
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="added skeleton of playlist feature&#10;added playlistlistview in fxml and playlist option in menu bar&#10;&#10;currently create button works but when creating new playlist, songs listview disappears">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/Playlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/Playlist.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" afterDir="false" />
     </list>
@@ -258,7 +259,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713081466766</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="added skeleton of playlist feature&#10;added playlistlistview in fxml and playlist option in menu bar&#10;&#10;currently create button works but when creating new playlist, songs listview disappears">
+      <option name="closed" value="true" />
+      <created>1713084158006</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1713084158006</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -279,6 +288,7 @@
     <MESSAGE value="volume now persists through each selected song but getting some errors when sliding volume slider in the logs but still works" />
     <MESSAGE value="fixed issue where clicking pause wouldnt pause the current song" />
     <MESSAGE value="added debugging print statements but still do not know where the nullpointerexception is" />
-    <option name="LAST_COMMIT_MESSAGE" value="added debugging print statements but still do not know where the nullpointerexception is" />
+    <MESSAGE value="added skeleton of playlist feature&#10;added playlistlistview in fxml and playlist option in menu bar&#10;&#10;currently create button works but when creating new playlist, songs listview disappears" />
+    <option name="LAST_COMMIT_MESSAGE" value="added skeleton of playlist feature&#10;added playlistlistview in fxml and playlist option in menu bar&#10;&#10;currently create button works but when creating new playlist, songs listview disappears" />
   </component>
 </project>

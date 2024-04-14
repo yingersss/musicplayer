@@ -23,12 +23,10 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainSceneController implements Initializable {
+    private ObservableList<Song> masterSongList = FXCollections.observableArrayList();
     private ObservableList<Playlist> playlists = FXCollections.observableArrayList();
     private MediaPlayer currentPlayer;
     private Song currentSong;
@@ -71,7 +69,14 @@ public class MainSceneController implements Initializable {
     @FXML private Button shuffleButton;
     @FXML private Button repeatButton;
 
+
     // action handlers
+    @FXML
+    private void handleViewAllSongsAction() {
+        // Reset the song list view to the master song list
+        displayMasterLibrary();
+    }
+
     @FXML
     private void handlePlayAction() {
         System.out.println("Play button clicked.");
@@ -131,8 +136,6 @@ public class MainSceneController implements Initializable {
         System.out.println("Debug: MediaPlayer created and playing.");
         setButtonIcon(playButton, "pause.png");
     }
-
-
 
     private void togglePlayPause() {
         if (currentPlayer == null) {
@@ -388,7 +391,7 @@ public class MainSceneController implements Initializable {
             button.setGraphic(iconView);
         });
     }
-    private void loadSongList() {
+    private void loadMasterSongList() {
         Path path = Paths.get(SONG_LIST_FILE);
         if (Files.exists(path)) {
             try {
@@ -413,7 +416,10 @@ public class MainSceneController implements Initializable {
                             Song song = new Song(title, artist, album, duration, "Unknown Genre", line);
                             song.setAlbumImage(albumImage); // Set the album art in the Song object
 
-                            Platform.runLater(() -> songListView.getItems().add(song));
+                            Platform.runLater(() -> {
+                                masterSongList.add(song);
+                                songListView.getItems().add(song);
+                            });
                             mediaPlayer.dispose();
                         });
                         mediaPlayer.play();
@@ -425,9 +431,9 @@ public class MainSceneController implements Initializable {
         }
     }
 
-    private void saveSongList() {
+    private void saveMasterSongList() {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(SONG_LIST_FILE))) {
-            for (Song song : songListView.getItems()) {
+            for (Song song : masterSongList) {
                 // Write only the absolute file path
                 writer.write(new File(song.getFilePath()).getAbsolutePath());
                 writer.newLine();
@@ -442,7 +448,7 @@ public class MainSceneController implements Initializable {
     // Call this method when application is closing
     @FXML
     void handleApplicationClose() {
-        saveSongList();
+        saveMasterSongList(); // Save the master list to a file
     }
 
     private void updateSongInfoDisplay(Song song) {
@@ -467,18 +473,30 @@ public class MainSceneController implements Initializable {
             albumImageView.setImage(null);
         }
     }
+    private void showAlert(String title, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
     private void setupListViewContextMenu() {
         // Create a Context Menu
         ContextMenu contextMenu = new ContextMenu();
 
         // Create Menu Items
-        MenuItem removeItem = new MenuItem("Remove");
-        contextMenu.getItems().add(removeItem);
+        MenuItem removeItem = new MenuItem("Remove from Library");
+        MenuItem addItemToPlaylist = new MenuItem("Add to Playlist");
+        MenuItem removeItemFromPlaylist = new MenuItem("Remove from Playlist");
+
+        contextMenu.getItems().addAll(addItemToPlaylist, removeItemFromPlaylist, removeItem);
 
         // Set the context menu on the ListView
         songListView.setContextMenu(contextMenu);
 
-        // Add action handler for the 'Remove' menu item
+        addItemToPlaylist.setOnAction(event -> addSongToPlaylist());
+        removeItemFromPlaylist.setOnAction(event -> removeSongFromPlaylist());
         removeItem.setOnAction(event -> {
             Song selectedSong = songListView.getSelectionModel().getSelectedItem();
             if (selectedSong != null) {
@@ -509,6 +527,23 @@ public class MainSceneController implements Initializable {
         });
         mediaPlayer.play();  // Note: You might not want to play the song immediately upon adding. Consider removing this line if not needed.
     }
+    private Playlist showPlaylistSelectionDialog() {
+        // Get all playlist names for the choice dialog
+        List<Playlist> choices = new ArrayList<>(playlists);
+
+        // Create a new choice dialog with the first item selected by default
+        ChoiceDialog<Playlist> dialog = new ChoiceDialog<>(choices.get(0), choices);
+        dialog.setTitle("Select Playlist");
+        dialog.setHeaderText("Add song to playlist");
+        dialog.setContentText("Choose a playlist:");
+
+        // Show the dialog and wait for the user's choice
+        Optional<Playlist> result = dialog.showAndWait();
+
+        // Return the selected playlist, or null if no selection was made
+        return result.orElse(null);
+    }
+
 
     private void loadPlaylist(Playlist playlist) {
         songListView.setItems(playlist.getSongs());
@@ -516,13 +551,15 @@ public class MainSceneController implements Initializable {
 
     @FXML
     private void createPlaylist() {
-        String name = promptForPlaylistName("Enter playlist name");
-        if (name != null && !name.isEmpty()) {
+        String name = promptForPlaylistName("New Playlist");  // This could be input from a dialog
+        if(name != null && !name.isEmpty()) {
             Playlist newPlaylist = new Playlist(name);
             playlists.add(newPlaylist);
-            playlistListView.getSelectionModel().select(newPlaylist);
+            // Don't automatically switch to this new playlist in the songListView
+            // playlistListView.getSelectionModel().select(newPlaylist);
         }
     }
+
     @FXML
     private void deletePlaylist() {
         Playlist selected = playlistListView.getSelectionModel().getSelectedItem();
@@ -546,10 +583,27 @@ public class MainSceneController implements Initializable {
     @FXML
     private void addSongToPlaylist() {
         Song selectedSong = songListView.getSelectionModel().getSelectedItem();
-        Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
-        if (selectedSong != null && selectedPlaylist != null) {
-            selectedPlaylist.addSong(selectedSong);
+        if (selectedSong == null) return;
+
+        // If no playlists exist, perhaps prompt the user to create one first
+        if (playlists.isEmpty()) {
+            // Show a message or create a new playlist
+            return;
         }
+
+        // Create a ChoiceDialog with the existing playlists
+        ChoiceDialog<Playlist> dialog = new ChoiceDialog<>(playlists.get(0), playlists);
+        dialog.setTitle("Select Playlist");
+        dialog.setHeaderText("Add song to playlist");
+        dialog.setContentText("Choose a playlist:");
+
+        // Show the dialog and capture the user's choice
+        Optional<Playlist> result = dialog.showAndWait();
+        result.ifPresent(playlist -> {
+            playlist.addSong(selectedSong);
+            playlistListView.refresh(); // update it
+            // Update your view, if necessary
+        });
     }
 
     @FXML
@@ -558,6 +612,8 @@ public class MainSceneController implements Initializable {
         Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
         if (selectedSong != null && selectedPlaylist != null) {
             selectedPlaylist.removeSong(selectedSong);
+            // Refresh the playlist view
+            loadPlaylist(selectedPlaylist);
         }
     }
 
@@ -568,11 +624,31 @@ public class MainSceneController implements Initializable {
         Optional<String> result = dialog.showAndWait();
         return result.orElse(null); // Return the string, or null if cancelled
     }
+    private void displayMasterLibrary() {
+        if (masterSongList.isEmpty()) {
+            System.out.println("Master song list is empty.");
+            showAlert("Display Master Library", "Master song list is empty.", Alert.AlertType.INFORMATION);
+        } else {
+            System.out.println("Displaying master song list with " + masterSongList.size() + " songs.");
+        }
+        songListView.setItems(masterSongList);
+        songListView.refresh(); // Force the ListView to refresh its display
+        updateSongInfoDisplay(null); // Optionally clear the song info display
+    }
+
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadSongList();
+        loadMasterSongList();
+        songListView.setItems(masterSongList); // Display the master list in songListView
         playlistListView.setItems(playlists);
-        playlistListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> loadPlaylist(newVal));
+        playlistListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                loadPlaylist(newVal); // Load the selected playlist
+            } else {
+                displayMasterLibrary(); // No playlist selected, show the master library
+            }
+        });
+
         setupListViewContextMenu();  // Setup context menu for ListView
         songListView.setItems(songObservableList); // Set the items for the ListView using your song list.
 

@@ -27,9 +27,6 @@ public class MainApp extends Application {
         // basically saving the songs list to a txtpad
         stage.setOnCloseRequest(event -> mainSceneController.handleApplicationClose());
 
-        // If you want to load an external stylesheet, uncomment and use the loadStylesheetIntoScene method
-        // loadStylesheetIntoScene(scene);
-
         stage.show();
     }
     public static void main(String[] args) {

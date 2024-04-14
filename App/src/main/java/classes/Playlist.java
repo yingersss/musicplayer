@@ -40,4 +40,10 @@ public class Playlist {
     public void removeSong(Song song) {
         songs.remove(song);
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
 }
