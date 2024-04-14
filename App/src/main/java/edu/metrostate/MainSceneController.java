@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainSceneController implements Initializable {
@@ -87,34 +88,46 @@ public class MainSceneController implements Initializable {
             currentPlayer.stop();
             currentPlayer.dispose();
             currentPlayer = null;
-            setButtonIcon(playButton, "play.png");  // Update the button icon to 'play' since a new song is selected.
-        }
-
-        if (currentPlayer == null) {
-            System.out.println("Creating new MediaPlayer for: " + selectedSong.getFilePath());
-            currentSong = selectedSong; // Update the current song.
-            Media media = new Media(new File(selectedSong.getFilePath()).toURI().toString());
-            currentPlayer = new MediaPlayer(media);
-            setupMediaPlayerEvents();
-            setupProgressSlider();
-            currentPlayer.play();
-            setButtonIcon(playButton, "pause.png");  // Set the button to 'pause' since it's now playing.
+            createAndPlayMedia(selectedSong);
+        } else if (currentPlayer == null) {
+            createAndPlayMedia(selectedSong);
         } else {
             // If the same song is re-selected, toggle play/pause.
-            MediaPlayer.Status status = currentPlayer.getStatus();
-            if (status == MediaPlayer.Status.PLAYING) {
-                System.out.println("Pausing: " + currentSong.getTrackTitle());
-                currentPlayer.pause();
-                setButtonIcon(playButton, "play.png");
-            } else if (status == MediaPlayer.Status.PAUSED) {
-                System.out.println("Resuming: " + currentSong.getTrackTitle());
-                currentPlayer.play();
-                setButtonIcon(playButton, "pause.png");
-            }
+            togglePlayPause();
         }
     }
 
+    private void createAndPlayMedia(Song song) {
+        System.out.println("Creating new MediaPlayer for: " + song.getFilePath());
+        Media media = new Media(new File(song.getFilePath()).toURI().toString());
+        currentPlayer = new MediaPlayer(media);
+        bindVolume(currentPlayer); // Bind the player's volume to the slider
+        setupMediaPlayerEvents();
+        setupProgressSlider();
+        currentPlayer.play();
+        setButtonIcon(playButton, "pause.png");
+    }
+    private void bindVolume(MediaPlayer player) {
+        volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (player != null) {
+                player.setVolume(newVal.doubleValue());
+            }
+        });
+    }
 
+
+    private void togglePlayPause() {
+        MediaPlayer.Status status = currentPlayer.getStatus();
+        if (status == MediaPlayer.Status.PLAYING) {
+            System.out.println("Pausing: " + currentSong.getTrackTitle());
+            currentPlayer.pause();
+            setButtonIcon(playButton, "play.png");
+        } else {
+            System.out.println("Resuming: " + currentSong.getTrackTitle());
+            currentPlayer.play();
+            setButtonIcon(playButton, "pause.png");
+        }
+    }
 
     @FXML
     private void handlePreviousAction() {
@@ -343,7 +356,7 @@ public class MainSceneController implements Initializable {
     // method to set a button to show the correct icon (play or pause)
     private void setButtonIcon(Button button, String iconName) {
         Platform.runLater(() -> {
-            Image img = new Image(getClass().getResourceAsStream("/images/" + iconName));
+            Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + iconName)));
             ImageView iconView = new ImageView(img);
             iconView.setPreserveRatio(true);
             iconView.setFitWidth(45);
@@ -366,7 +379,7 @@ public class MainSceneController implements Initializable {
                             String title = (String) media.getMetadata().get("title");
                             String artist = (String) media.getMetadata().get("artist");
                             String album = (String) media.getMetadata().get("album");
-                            Double duration = media.getDuration().toSeconds();
+                            double duration = media.getDuration().toSeconds();
                             Image albumImage = (Image) media.getMetadata().get("image"); // Extract the album art
 
                             if (title == null || title.isEmpty()) {
@@ -376,9 +389,7 @@ public class MainSceneController implements Initializable {
                             Song song = new Song(title, artist, album, duration, "Unknown Genre", line);
                             song.setAlbumImage(albumImage); // Set the album art in the Song object
 
-                            Platform.runLater(() -> {
-                                songListView.getItems().add(song);
-                            });
+                            Platform.runLater(() -> songListView.getItems().add(song));
                             mediaPlayer.dispose();
                         });
                         mediaPlayer.play();
@@ -562,8 +573,6 @@ public class MainSceneController implements Initializable {
         });
 
         // Add a listener to update song info display when a song is selected from the list.
-        songListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            updateSongInfoDisplay(newValue);
-        });
+        songListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateSongInfoDisplay(newValue));
     }
     }
