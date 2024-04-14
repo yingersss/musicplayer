@@ -216,10 +216,15 @@ public class MainSceneController implements Initializable {
             FXCollections.shuffle(shuffledSongsObservableList); // Shuffle the copy
             songListView.setItems(shuffledSongsObservableList); // Set the shuffled list as the items
             isShuffled = true;
+            setButtonIcon(shuffleButton, "shuffle_2.png");
+            System.out.println("Shuffle Mode On.");
         } else {
             // If the list is already shuffled, revert back to the original order and set the flag to false
             songListView.setItems(songObservableList); // Revert back to the original list
             isShuffled = false;
+            setButtonIcon(shuffleButton, "shuffle.png");
+            System.out.println("Shuffle Mode Off.");
+
         }
     }
     @FXML
