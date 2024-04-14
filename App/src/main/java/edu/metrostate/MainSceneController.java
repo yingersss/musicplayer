@@ -15,8 +15,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
-
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -74,11 +72,26 @@ public class MainSceneController implements Initializable {
     // action handlers
     @FXML
     private void handleViewAllSongsAction() {
-        // Reset the song list view to the master song list
+        // Check if the list is shuffled, if so, reset it
+        if (isShuffled) {
+            handleShuffleAction(); // This might need to reset the shuffle state
+        }
+
+        // Reset the observable lists to the master library
+        songObservableList.setAll(masterSongList);
+        songListView.setItems(songObservableList); // Update the songListView to show the master library
+
+        // Clear selection from playlistListView to indicate no specific playlist is selected
+        playlistListView.getSelectionModel().clearSelection();
+
+        // Reset shuffledSongsObservableList to be in sync with the master library
+        shuffledSongsObservableList = FXCollections.observableArrayList(masterSongList);
+        // Update the display to show the master library
         displayMasterLibrary();
     }
 
-    @FXML
+
+        @FXML
     private void handlePlayAction() {
         System.out.println("Play button clicked.");
         Song selectedSong = songListView.getSelectionModel().getSelectedItem();
@@ -203,34 +216,32 @@ public class MainSceneController implements Initializable {
                     return;  // No repeat, do nothing further
             }
         }
-
         songListView.getSelectionModel().select(nextIndex);
         playSelectedSong();
     }
 
     @FXML
     private void handleShuffleAction() {
-        Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
-        ObservableList<Song> currentList = selectedPlaylist != null ? selectedPlaylist.getSongs() : masterSongList;
+        // Determine which list to shuffle
+        ObservableList<Song> currentListInView = playlistListView.getSelectionModel().isEmpty() ?
+            songObservableList : // Master list if no playlist is selected
+            playlistListView.getSelectionModel().getSelectedItem().getSongs();
 
         if (!isShuffled) {
-            // Backup the current list
-            shuffledSongsObservableList = FXCollections.observableArrayList(currentList);
-            // Shuffle the copy
+            // Shuffle mode is off, turn it on
+            shuffledSongsObservableList = FXCollections.observableArrayList(currentListInView);
             FXCollections.shuffle(shuffledSongsObservableList);
-            // Set the shuffled list as the items
             songListView.setItems(shuffledSongsObservableList);
             isShuffled = true;
             setButtonIcon(shuffleButton, "shuffle_2.png");
-            System.out.println("Shuffle Mode On.");
         } else {
-            // Revert back to the original list
-            songListView.setItems(currentList);
+            // Shuffle mode is on, turn it off and restore original list
+            songListView.setItems(currentListInView);
             isShuffled = false;
             setButtonIcon(shuffleButton, "shuffle.png");
-            System.out.println("Shuffle Mode Off.");
         }
     }
+
 
     @FXML
     private void handleRepeatAction() {
@@ -719,10 +730,15 @@ public class MainSceneController implements Initializable {
         playlistListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 loadPlaylist(newVal); // Load the selected playlist
+                if (isShuffled) {
+                    // Reset shuffle state when a new playlist is selected
+                    handleShuffleAction();
+                }
             } else {
                 displayMasterLibrary(); // No playlist selected, show the master library
             }
         });
+
 
         setupListViewContextMenu();  // Setup context menu for ListView
         songListView.setItems(songObservableList); // Set the items for the ListView using your song list.
