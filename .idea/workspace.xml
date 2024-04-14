@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="fixed issue where clicking pause wouldnt pause the current song">
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="added debugging print statements but still do not know where the nullpointerexception is">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/Playlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/Playlist.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +250,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713079544489</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="added debugging print statements but still do not know where the nullpointerexception is">
+      <option name="closed" value="true" />
+      <created>1713081466766</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1713081466766</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -268,6 +278,7 @@
     <MESSAGE value="when selecting other songs while one song is playing, playbutton now shows play instead of pause&#10;&#10;also refactored some code for cleaner code" />
     <MESSAGE value="volume now persists through each selected song but getting some errors when sliding volume slider in the logs but still works" />
     <MESSAGE value="fixed issue where clicking pause wouldnt pause the current song" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed issue where clicking pause wouldnt pause the current song" />
+    <MESSAGE value="added debugging print statements but still do not know where the nullpointerexception is" />
+    <option name="LAST_COMMIT_MESSAGE" value="added debugging print statements but still do not know where the nullpointerexception is" />
   </component>
 </project>

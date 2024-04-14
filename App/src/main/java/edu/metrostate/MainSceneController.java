@@ -25,9 +25,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainSceneController implements Initializable {
+    private ObservableList<Playlist> playlists = FXCollections.observableArrayList();
     private MediaPlayer currentPlayer;
     private Song currentSong;
     private static final String SONG_LIST_FILE = "songs.txt"; // The name of the file to store the song paths
@@ -35,6 +37,8 @@ public class MainSceneController implements Initializable {
     // left side column song listview
     @FXML
     private ListView<Song> songListView;
+    @FXML
+    private ListView<Playlist> playlistListView;
     // album image view
     @FXML
     private ImageView albumImageView;
@@ -506,9 +510,69 @@ public class MainSceneController implements Initializable {
         mediaPlayer.play();  // Note: You might not want to play the song immediately upon adding. Consider removing this line if not needed.
     }
 
+    private void loadPlaylist(Playlist playlist) {
+        songListView.setItems(playlist.getSongs());
+    }
+
+    @FXML
+    private void createPlaylist() {
+        String name = promptForPlaylistName("Enter playlist name");
+        if (name != null && !name.isEmpty()) {
+            Playlist newPlaylist = new Playlist(name);
+            playlists.add(newPlaylist);
+            playlistListView.getSelectionModel().select(newPlaylist);
+        }
+    }
+    @FXML
+    private void deletePlaylist() {
+        Playlist selected = playlistListView.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            playlists.remove(selected);
+        }
+    }
+
+    @FXML
+    private void renamePlaylist() {
+        Playlist selected = playlistListView.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            String newName = promptForPlaylistName("Rename playlist");
+            if (newName != null && !newName.isEmpty()) {
+                selected.setName(newName);
+                playlistListView.refresh(); // To update the ListView display
+            }
+        }
+    }
+
+    @FXML
+    private void addSongToPlaylist() {
+        Song selectedSong = songListView.getSelectionModel().getSelectedItem();
+        Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
+        if (selectedSong != null && selectedPlaylist != null) {
+            selectedPlaylist.addSong(selectedSong);
+        }
+    }
+
+    @FXML
+    private void removeSongFromPlaylist() {
+        Song selectedSong = songListView.getSelectionModel().getSelectedItem();
+        Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
+        if (selectedSong != null && selectedPlaylist != null) {
+            selectedPlaylist.removeSong(selectedSong);
+        }
+    }
+
+    private String promptForPlaylistName(String title) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(title);
+        dialog.setHeaderText("Enter new playlist name:");
+        Optional<String> result = dialog.showAndWait();
+        return result.orElse(null); // Return the string, or null if cancelled
+    }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadSongList();
+        playlistListView.setItems(playlists);
+        playlistListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> loadPlaylist(newVal));
         setupListViewContextMenu();  // Setup context menu for ListView
         songListView.setItems(songObservableList); // Set the items for the ListView using your song list.
 
@@ -589,6 +653,15 @@ public class MainSceneController implements Initializable {
             protected void updateItem(Song song, boolean empty) {
                 super.updateItem(song, empty);
                 setText(empty || song == null ? null : song.getTrackTitle());
+            }
+        });
+
+        // setting up cell factory for playlistListview
+        playlistListView.setCellFactory(param -> new ListCell<Playlist>() {
+            @Override
+            protected void updateItem(Playlist playlist, boolean empty) {
+                super.updateItem(playlist, empty);
+                setText(empty || playlist == null ? null : playlist.getName());
             }
         });
 

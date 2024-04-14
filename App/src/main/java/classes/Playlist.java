@@ -1,40 +1,43 @@
 package classes; // temporary package name, change if necessary
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 import java.util.List;
 public class Playlist {
-    private List<Song> songs;
-    private String playlistName;
+    private final StringProperty name;
+    private ObservableList<Song> songs;
 
-    // constructor
-    public Playlist(String playlistName) {
-        this.songs = new ArrayList<>();
-        this.playlistName = playlistName;
+    public Playlist(String name) {
+        this.name = new SimpleStringProperty(name);
+        this.songs = FXCollections.observableArrayList();
     }
 
-    // getter setter for playlistName
-    public String getPlaylistName() {
-        return playlistName;
+    public String getName() {
+        return name.get();
     }
 
-    public void setPlaylistName(String playlistName) {
-        this.playlistName = playlistName;
+    public void setName(String newName) {
+        this.name.set(newName);
     }
 
-    // adding song to playlist
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    public ObservableList<Song> getSongs() {
+        return songs;
+    }
+
     public void addSong(Song song) {
-        songs.add(song);
+        if (!songs.contains(song)) {
+            songs.add(song);
+        }
     }
 
-    // remove
     public void removeSong(Song song) {
         songs.remove(song);
-    }
-
-    // print all songs in list
-    public void printPlaylist() {
-        System.out.println("Playlist songs: \n");
-        for ( Song song : songs) {
-            System.out.println(song);
-        }
     }
 }
