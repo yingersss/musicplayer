@@ -98,11 +98,23 @@ public class MainSceneController implements Initializable {
     }
 
     private void createAndPlayMedia(Song song) {
+        if (song == null) return;
         System.out.println("Creating new MediaPlayer for: " + song.getFilePath());
+
+        currentSong = song; // Ensure this is set before any operation that might need it
+
+        if (currentPlayer != null) {
+            currentPlayer.stop();
+            currentPlayer.dispose();
+        }
+
         Media media = new Media(new File(song.getFilePath()).toURI().toString());
         currentPlayer = new MediaPlayer(media);
-        bindVolume(currentPlayer); // Bind the player's volume to the slider
-        setupMediaPlayerEvents();
+        currentPlayer.setOnReady(() -> {
+            setupVolumeControl();  // Set volume control when MediaPlayer is ready
+        });
+
+        setupMediaPlayerEvents(); // Set up media player events
         setupProgressSlider();
         currentPlayer.play();
         setButtonIcon(playButton, "pause.png");
@@ -293,56 +305,54 @@ public class MainSceneController implements Initializable {
         timeLabel.setText(timeText);
     }
     private void setupMediaPlayerEvents() {
-        if (currentPlayer != null) {
-            currentPlayer.setOnError(() -> {
-                System.out.println("Error with: " + currentSong.getFilePath());
-                System.out.println(currentPlayer.getError().getMessage());
-            });
+        if (currentPlayer == null) return;
 
-            currentPlayer.setOnPlaying(() -> {
-                System.out.println("Playing: " + currentSong.getFilePath());
-                setButtonIcon(playButton, "pause.png");
-            });
+        currentPlayer.setOnError(() -> {
+            String filePath = (currentSong != null) ? currentSong.getFilePath() : "unknown";
+            System.out.println("Error with: " + filePath);
+            System.out.println(currentPlayer.getError().getMessage());
+        });
 
-            currentPlayer.setOnPaused(() -> {
-                System.out.println("MediaPlayer is paused.");
-                setButtonIcon(playButton, "play.png");
-            });
+        currentPlayer.setOnPlaying(() -> {
+            System.out.println("Playing: " + (currentSong != null ? currentSong.getFilePath() : "unknown path"));
+            setButtonIcon(playButton, "pause.png");
+        });
 
-            currentPlayer.setOnEndOfMedia(() -> {
-                System.out.println("End of media.");
-                switch (repeatMode) {
-                    case REPEAT_LIST:
-                        // Move to the next song or wrap to the first song
-                        handleNextAction();
-                        break;
-                    case REPEAT_SONG:
-                        // Replay the same song
-                        currentPlayer.seek(Duration.ZERO);
-                        currentPlayer.play();
-                        System.out.println("Repeating song: " + currentSong.getFilePath());
-                        break;
-                    default:
-                        // If no repeat mode, play next song unless it is last index
-                        handleNextAction();
-                        }
-            });
+        currentPlayer.setOnPaused(() -> {
+            System.out.println("MediaPlayer is paused.");
+            setButtonIcon(playButton, "play.png");
+        });
 
-            currentPlayer.setOnReady(() -> {
-                // ... [handle ready state]
-                setupVolumeControl();
-                progressSlider.setMax(currentPlayer.getTotalDuration().toSeconds());
-            });
+        currentPlayer.setOnEndOfMedia(() -> {
+            System.out.println("End of media.");
+            switch (repeatMode) {
+                case REPEAT_LIST:
+                    handleNextAction();
+                    break;
+                case REPEAT_SONG:
+                    currentPlayer.seek(Duration.ZERO);
+                    currentPlayer.play();
+                    System.out.println("Repeating song: " + (currentSong != null ? currentSong.getFilePath() : "unknown path"));
+                    break;
+                default:
+                    handleNextAction();
+            }
+        });
 
-            currentPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-                if (!progressSlider.isValueChanging()) { // Only update when the user is not interacting
-                    Platform.runLater(() -> {
-                        progressSlider.setValue(newValue.toSeconds());
-                    });
-                }
-            });
-        }
+        currentPlayer.setOnReady(() -> {
+            setupVolumeControl();
+            progressSlider.setMax(currentPlayer.getTotalDuration().toSeconds());
+        });
+
+        currentPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            if (!progressSlider.isValueChanging()) {
+                Platform.runLater(() -> {
+                    progressSlider.setValue(newValue.toSeconds());
+                });
+            }
+        });
     }
+
     private void setupVolumeControl() {
         if (currentPlayer != null) {
             // Bind the volume property of MediaPlayer to the value of the volume slider.
