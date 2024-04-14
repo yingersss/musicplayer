@@ -4,8 +4,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
-import java.util.List;
 public class Playlist {
     private final StringProperty name;
     private ObservableList<Song> songs;

@@ -184,11 +184,11 @@
             </AnchorPane>
          </children>
       </HBox>
-      <VBox layoutY="450.0" prefHeight="300.0" prefWidth="400.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="800.0" AnchorPane.topAnchor="450.0">
+      <VBox layoutY="460.0" prefHeight="300.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="800.0" AnchorPane.topAnchor="460.0">
          <children>
             <ListView fx:id="playlistListView" prefWidth="400.0" VBox.vgrow="ALWAYS" />
          </children></VBox>
-      <Label layoutY="432.0" text="PLAYLISTS" textAlignment="CENTER">
+      <Label layoutY="436.0" text="PLAYLISTS" textAlignment="CENTER">
          <padding>
             <Insets left="7.0" />
          </padding>
@@ -196,6 +196,6 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Button fx:id="viewAllSongsMenuItem" layoutX="306.0" layoutY="428.0" mnemonicParsing="false" onAction="#handleViewAllSongsAction" text="View All Songs" />
+      <Button fx:id="viewAllSongsMenuItem" layoutX="306.0" layoutY="432.0" mnemonicParsing="false" onAction="#handleViewAllSongsAction" prefWidth="94.0" text="View All Songs" />
    </children>
 </AnchorPane>

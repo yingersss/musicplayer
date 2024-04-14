@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="added skeleton of playlist feature&#10;added playlistlistview in fxml and playlist option in menu bar&#10;&#10;currently create button works but when creating new playlist, songs listview disappears">
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="can now view master library with a new button&#10;create new playlists and view them separately&#10;have to figure out a way to save playlists&#10;created a masterSongList">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/Playlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/Playlist.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/resources/edu/metrostate/musicplayertest.fxml" afterDir="false" />
     </list>
@@ -42,6 +41,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -267,7 +267,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713084158006</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="can now view master library with a new button&#10;create new playlists and view them separately&#10;have to figure out a way to save playlists&#10;created a masterSongList">
+      <option name="closed" value="true" />
+      <created>1713116769532</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1713116769532</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -289,6 +297,7 @@
     <MESSAGE value="fixed issue where clicking pause wouldnt pause the current song" />
     <MESSAGE value="added debugging print statements but still do not know where the nullpointerexception is" />
     <MESSAGE value="added skeleton of playlist feature&#10;added playlistlistview in fxml and playlist option in menu bar&#10;&#10;currently create button works but when creating new playlist, songs listview disappears" />
-    <option name="LAST_COMMIT_MESSAGE" value="added skeleton of playlist feature&#10;added playlistlistview in fxml and playlist option in menu bar&#10;&#10;currently create button works but when creating new playlist, songs listview disappears" />
+    <MESSAGE value="can now view master library with a new button&#10;create new playlists and view them separately&#10;have to figure out a way to save playlists&#10;created a masterSongList" />
+    <option name="LAST_COMMIT_MESSAGE" value="can now view master library with a new button&#10;create new playlists and view them separately&#10;have to figure out a way to save playlists&#10;created a masterSongList" />
   </component>
 </project>

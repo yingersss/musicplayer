@@ -16,6 +16,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -126,9 +127,8 @@ public class MainSceneController implements Initializable {
         System.out.println("Debug: Creating MediaPlayer for song: " + song.getFilePath());
         Media media = new Media(new File(song.getFilePath()).toURI().toString());
         currentPlayer = new MediaPlayer(media);
-        currentPlayer.setOnReady(() -> {
-            setupVolumeControl();  // Set volume control when MediaPlayer is ready
-        });
+        // Set volume control when MediaPlayer is ready
+        currentPlayer.setOnReady(this::setupVolumeControl);
 
         setupMediaPlayerEvents(); // Set up media player events
         setupProgressSlider();
@@ -399,30 +399,12 @@ public class MainSceneController implements Initializable {
                 for (String line : lines) {
                     File file = new File(line);
                     if (file.exists() && file.getName().toLowerCase().endsWith(".mp3")) {
-                        Media media = new Media(file.toURI().toString());
-                        MediaPlayer mediaPlayer = new MediaPlayer(media);
-
-                        mediaPlayer.setOnReady(() -> {
-                            String title = (String) media.getMetadata().get("title");
-                            String artist = (String) media.getMetadata().get("artist");
-                            String album = (String) media.getMetadata().get("album");
-                            double duration = media.getDuration().toSeconds();
-                            Image albumImage = (Image) media.getMetadata().get("image"); // Extract the album art
-
-                            if (title == null || title.isEmpty()) {
-                                title = file.getName().substring(0, file.getName().lastIndexOf('.'));
-                            }
-
-                            Song song = new Song(title, artist, album, duration, "Unknown Genre", line);
-                            song.setAlbumImage(albumImage); // Set the album art in the Song object
-
+                        createSongFromFile(file, song -> {
                             Platform.runLater(() -> {
                                 masterSongList.add(song);
                                 songListView.getItems().add(song);
                             });
-                            mediaPlayer.dispose();
                         });
-                        mediaPlayer.play();
                     }
                 }
             } catch (IOException e) {
@@ -431,14 +413,111 @@ public class MainSceneController implements Initializable {
         }
     }
 
+
+    public void createSongFromFile(File file, SongReadyCallback callback) {
+        Media media = new Media(file.toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+        mediaPlayer.setOnReady(() -> {
+            String title = (String) media.getMetadata().get("title");
+            String artist = (String) media.getMetadata().get("artist");
+            String album = (String) media.getMetadata().get("album");
+            double duration = media.getDuration().toSeconds();
+            Image albumImage = (Image) media.getMetadata().get("image");
+
+            if (title == null || title.isEmpty()) {
+                title = file.getName().substring(0, file.getName().lastIndexOf('.'));
+            }
+
+            Song song = new Song(title, artist, album, duration, "Unknown Genre", file.getAbsolutePath());
+            song.setAlbumImage(albumImage);
+            mediaPlayer.dispose();
+
+            if (callback != null) {
+                callback.onSongReady(song);
+            }
+        });
+        mediaPlayer.play(); // Again, consider if this is necessary
+    }
+
+
+    // Method to save all playlists to a file
+    private void savePlaylists() {
+        String playlistFileName = "playlists.txt";
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(playlistFileName))) {
+            for (Playlist playlist : playlists) {
+                writer.write(playlist.getName());
+                for (Song song : playlist.getSongs()) {
+                    writer.write(";" + song.getFilePath()); // Delimit songs with semicolon
+                }
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadPlaylists() {
+        String playlistFileName = "playlists.txt";
+        Path playlistFilePath = Paths.get(playlistFileName);
+
+        // Check if the playlist file exists
+        if (Files.exists(playlistFilePath)) {
+            try {
+                List<String> lines = Files.readAllLines(playlistFilePath);
+                for (String line : lines) {
+                    // Split the line into parts
+                    String[] parts = line.split(";");
+                    if (parts.length > 1) {
+                        // The first part is the playlist name
+                        String playlistName = parts[0];
+                        Playlist playlist = new Playlist(playlistName);
+
+                        // The rest of the parts are song file paths
+                        for (int i = 1; i < parts.length; i++) {
+                            String songFilePath = parts[i];
+                            File songFile = new File(songFilePath);
+                            if (songFile.exists()) {
+                                createSongFromFile(songFile, song -> {
+                                    // This block of code will be called when the song is ready
+                                    // Now you can add the song to the playlist
+                                    playlist.addSong(song);
+
+                                    // If you need to update the UI, wrap it in Platform.runLater
+                                    Platform.runLater(() -> {
+                                        // Update your UI here if necessary
+                                    });
+                                });
+                            } else {
+                                System.out.println("File not found: " + songFile.getPath());
+                            }
+                        }
+
+                        // Add the playlist to the observable list
+                        playlists.add(playlist);
+                    }
+                }
+
+                // Set the observable list to the ListView
+                playlistListView.setItems(playlists);
+            } catch (IOException e) {
+                System.out.println("Error reading playlist file: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Playlist file does not exist.");
+        }
+    }
+
+
     private void saveMasterSongList() {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(SONG_LIST_FILE))) {
             for (Song song : masterSongList) {
                 // Write only the absolute file path
-                writer.write(new File(song.getFilePath()).getAbsolutePath());
+                writer.write(song.getFilePath());
                 writer.newLine();
-                System.out.println("Captured path: " + new File(song.getFilePath()).getAbsolutePath());
-                System.out.println("Saving path: " + new File(song.getFilePath()).getAbsolutePath());
+                System.out.println("Captured path: " + song.getFilePath());
+                System.out.println("Saving path: " + song.getFilePath());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -449,6 +528,7 @@ public class MainSceneController implements Initializable {
     @FXML
     void handleApplicationClose() {
         saveMasterSongList(); // Save the master list to a file
+        savePlaylists();
     }
 
     private void updateSongInfoDisplay(Song song) {
@@ -473,6 +553,7 @@ public class MainSceneController implements Initializable {
             albumImageView.setImage(null);
         }
     }
+
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -633,14 +714,16 @@ public class MainSceneController implements Initializable {
         }
         songListView.setItems(masterSongList);
         songListView.refresh(); // Force the ListView to refresh its display
-        updateSongInfoDisplay(null); // Optionally clear the song info display
     }
+
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadMasterSongList();
+        loadPlaylists();
         songListView.setItems(masterSongList); // Display the master list in songListView
         playlistListView.setItems(playlists);
+
         playlistListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 loadPlaylist(newVal); // Load the selected playlist
