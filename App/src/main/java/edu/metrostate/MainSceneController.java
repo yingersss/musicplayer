@@ -691,6 +691,7 @@ public class MainSceneController implements Initializable {
             song.setAlbumImage(albumImage);
             Platform.runLater(() -> {
                 songObservableList.add(song);
+                masterSongList.add(song);
             });
             mediaPlayer.dispose();
         });
