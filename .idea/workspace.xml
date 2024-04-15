@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="included sample mp3 files in resources folder&#10;updated readme to reflect functional requirements changes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="updated readme and cleared playlist and song txt files">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -377,12 +376,26 @@
       <option name="project" value="LOCAL" />
       <updated>1713215132579</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="updated readme">
+      <option name="closed" value="true" />
+      <created>1713215485422</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1713215485422</updated>
+    </task>
+    <task id="LOCAL-00036" summary="updated readme and cleared playlist and song txt files">
+      <option name="closed" value="true" />
+      <created>1713215944014</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1713215944014</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="retrieved metadata for album art and now populates the albumImageView portion" />
-    <MESSAGE value="added tracking progress bar and time label duration" />
     <MESSAGE value="added new button functionalities&#10;next button&#10;previous button&#10;repeat button" />
     <MESSAGE value="changed progressBar to Slider type&#10;can now click through the progress slider and seek the current track" />
     <MESSAGE value="added shuffle button functionality" />
@@ -406,6 +419,8 @@
     <MESSAGE value="updated readme to fit milestone 4" />
     <MESSAGE value="included sample mp3 files in resources folder" />
     <MESSAGE value="included sample mp3 files in resources folder&#10;updated readme to reflect functional requirements changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="included sample mp3 files in resources folder&#10;updated readme to reflect functional requirements changes" />
+    <MESSAGE value="updated readme" />
+    <MESSAGE value="updated readme and cleared playlist and song txt files" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated readme and cleared playlist and song txt files" />
   </component>
 </project>
