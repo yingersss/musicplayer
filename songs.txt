@@ -1,0 +1,10 @@
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\02. Zanarkand.mp3
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\2.01 Blinded By Light.mp3
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\2.01 Changing Seasons -Reload-.mp3
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\2.26 Memories of You -Reload-.mp3
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\18. Besaid.mp3
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\19. Spira Unplugged.mp3
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\25. Braska's Daughter.mp3
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\27. Yuna's Theme.mp3
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\70. SUTEKI DA NE (Isn't It Wonderful).mp3
+C:\Users\yvang\OneDrive\Desktop\musicplayer\musicplayer\App\src\main\resources\songs\78. A Fleeting Dream.mp3

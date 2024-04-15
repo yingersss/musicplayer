@@ -30,3 +30,7 @@ To run the application follow these steps:
 6. If you are using IntelliJ, click on the elephant icon on the top right side if using IntelliJ to synchronize project and dependencies.
 7. Ensure that "Music Player" run configuration is selected in the dropdown menu to the left of the green button on the top right side of the toolbar
 8. Click the play button, the project should then compile and start the application, showing the skeleton of our application UI.
+
+## Sample Songs
+- I have included some mp3 files within the resources folder and have imported them into the application for users to test if they don't have mp3 files to work with.
+- I have also created sample Playlists for users to test functions with.
