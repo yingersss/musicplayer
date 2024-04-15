@@ -57,7 +57,6 @@ public class PlaylistManager {
     }
 
 
-
     public void savePlaylists() {
         try {
             List<String> lines = new ArrayList<>();

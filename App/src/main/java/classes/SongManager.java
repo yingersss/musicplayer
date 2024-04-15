@@ -148,9 +148,4 @@ public class SongManager {
         mediaPlayer.play(); // Start loading the media to trigger metadata loading
     }
 
-        private static String getDefaultTitle(File file) {
-        String name = file.getName();
-        int pos = name.lastIndexOf(".");
-        return pos > 0 ? name.substring(0, pos) : name;
-    }
 }
