@@ -37,4 +37,4 @@ To run the application follow these steps:
 
 ## Sample Songs
 - I have included some mp3 files within the resources/songs folder for users to test if they don't have mp3 files to work with.
-- I have also created sample Playlists for users to test functions with.
+- Users can create playlists and test adding songs into them.
