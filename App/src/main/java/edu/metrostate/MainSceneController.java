@@ -244,8 +244,8 @@ public class MainSceneController implements Initializable {
     private void handleShuffleAction() {
         // Determine which list to shuffle
         ObservableList<Song> currentListInView = playlistListView.getSelectionModel().isEmpty() ?
-            songObservableList : // Master list if no playlist is selected
-            playlistListView.getSelectionModel().getSelectedItem().getSongs();
+                songObservableList : // Master list if no playlist is selected
+                playlistListView.getSelectionModel().getSelectedItem().getSongs();
 
         if (!isShuffled) {
             // Shuffle mode is off, turn it on
@@ -551,18 +551,24 @@ public class MainSceneController implements Initializable {
 
 
     private void saveMasterSongList() {
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(SONG_LIST_FILE))) {
-            for (Song song : masterSongList) {
-                // Write only the absolute file path
-                writer.write(song.getFilePath());
-                writer.newLine();
-                System.out.println("Captured path: " + song.getFilePath());
-                System.out.println("Saving path: " + song.getFilePath());
+        System.out.println("Saving master song list to file.");
+        Path path = Paths.get(SONG_LIST_FILE);
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            if (masterSongList.isEmpty()) {
+                System.out.println("Warning: masterSongList is empty, nothing to save.");
+            } else {
+                for (Song song : masterSongList) {
+                    writer.write(song.getFilePath());
+                    writer.newLine();
+                    System.out.println("Saving song path: " + song.getFilePath());
+                }
             }
         } catch (IOException e) {
+            System.out.println("Error saving master song list to file: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
     // Call this method when application is closing
     @FXML
