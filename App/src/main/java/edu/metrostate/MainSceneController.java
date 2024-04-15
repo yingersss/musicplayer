@@ -244,8 +244,13 @@ public class MainSceneController implements Initializable {
     private void handleShuffleAction() {
         // Determine which list to shuffle
         ObservableList<Song> currentListInView = playlistListView.getSelectionModel().isEmpty() ?
-                songObservableList : // Master list if no playlist is selected
+                songManager.getMasterSongList() : // Master list if no playlist is selected
                 playlistListView.getSelectionModel().getSelectedItem().getSongs();
+
+        // Ensure the shuffled list is initialized
+        if (shuffledSongsObservableList == null) {
+            shuffledSongsObservableList = FXCollections.observableArrayList();
+        }
 
         if (!isShuffled) {
             // Shuffle mode is off, turn it on
@@ -489,6 +494,7 @@ public class MainSceneController implements Initializable {
         removeItem.setOnAction(event -> {
             Song selectedSong = songListView.getSelectionModel().getSelectedItem();
             if (selectedSong != null) {
+                songManager.getMasterSongList().remove(selectedSong);
                 songObservableList.remove(selectedSong);
             }
         });
@@ -617,7 +623,6 @@ public class MainSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         songManager.loadMasterSongList();
         playlistManager.loadPlaylists();
-
         // Print statements for debugging
         System.out.println("Songs loaded: " + songManager.getMasterSongList().size());
         System.out.println("Playlists loaded: " + playlistManager.getPlaylists().size());
@@ -643,7 +648,6 @@ public class MainSceneController implements Initializable {
                 displayMasterLibrary(); // No playlist selected, show the master library
             }
         });
-
 
         setupListViewContextMenu();  // Setup context menu for ListView
         setupPlaylistListViewContextMenu(); // setup context menu for playlistview
