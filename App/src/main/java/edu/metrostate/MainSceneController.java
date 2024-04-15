@@ -494,10 +494,17 @@ public class MainSceneController implements Initializable {
         removeItem.setOnAction(event -> {
             Song selectedSong = songListView.getSelectionModel().getSelectedItem();
             if (selectedSong != null) {
-                songManager.getMasterSongList().remove(selectedSong);
-                songObservableList.remove(selectedSong);
+                songManager.getMasterSongList().remove(selectedSong); // Remove from the master list
+                songObservableList.remove(selectedSong); // Remove from the observable list
+                if (isShuffled) {
+                    shuffledSongsObservableList.remove(selectedSong); // Remove from the shuffled list if shuffle is on
+                    songListView.setItems(shuffledSongsObservableList); // Refresh the list view
+                } else {
+                    songListView.setItems(songObservableList); // Refresh the list view if shuffle is not on
+                }
             }
         });
+
     }
     @FXML
     private void setupPlaylistListViewContextMenu() {
