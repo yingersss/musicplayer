@@ -7,6 +7,8 @@ public class Song extends Track{
     private String genre;
     private String filePath;
     private Image albumImage;
+    private boolean metadataLoaded = false;
+
 
     // constructor
     public Song (String trackTitle, String trackAuthor, String trackGenre, double trackLength, String albumName, String filePath) {
@@ -52,4 +54,5 @@ public class Song extends Track{
     public Image getAlbumImage() {
         return albumImage;
     }
+
 }

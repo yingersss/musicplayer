@@ -29,9 +29,9 @@
                </items>
             </Menu>
             <Menu text="Playlists">
-               <MenuItem onAction="#createPlaylist" text="Create Playlist" />
-               <MenuItem onAction="#deletePlaylist" text="Remove Playlist" />
-               <MenuItem onAction="#renamePlaylist" text="Rename Playlist" />
+               <MenuItem onAction="#handleCreatePlaylist" text="Create Playlist" />
+               <MenuItem onAction="#handleDeleteSelectedPlaylist" text="Remove Playlist" />
+               <MenuItem onAction="#handleRenameSelectedPlaylist" text="Rename Playlist" />
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                <items>

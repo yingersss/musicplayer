@@ -22,12 +22,10 @@ public class MainApp extends Application {
         stage.setScene(scene);
         stage.setTitle("Music Player");
         stage.setResizable(false); // Could not figure out how to dynamically stretch the album image or vbox that held the image
-
+        stage.show();
         // Set the close request event to call the handleApplicationClose method
         // basically saving the songs list to a txtpad
         stage.setOnCloseRequest(event -> mainSceneController.handleApplicationClose());
-
-        stage.show();
     }
     public static void main(String[] args) {
         launch(args);
