@@ -19,34 +19,40 @@ public class PlaylistManager {
         return playlists;
     }
 
+    // method to load playlist from txt file
     public void loadPlaylists() {
+
         File file = new File(PLAYLISTS_FILE);
+
         if (!file.exists()) {
-            System.out.println("Playlist file does not exist.");
+            System.out.println("Playlist file does not exist."); // debug
             return;
         }
 
         try {
-            List<String> lines = Files.readAllLines(Paths.get(PLAYLISTS_FILE));
-            lines.forEach(line -> processLine(line));
+            List<String> lines = Files.readAllLines(Paths.get(PLAYLISTS_FILE)); // reads all lines
+            lines.forEach(line -> processLine(line)); // stores each line in a string list and calls processline
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    // helper function to load playlist
     private void processLine(String line) {
-        String[] parts = line.split(";");
-        if (parts.length == 0) return;
 
-        Playlist playlist = new Playlist(parts[0]);
-        Stream.of(parts).skip(1) // Skip the playlist name
-                .map(File::new)
-                .filter(File::exists)
-                .forEach(songFile -> addSongToPlaylist(songFile, playlist));
+        String[] parts = line.split(";"); // creates string array with regex ; to differentiate
+        if (parts.length == 0) return; // if array -> empty txt file so do nothing
 
-        playlists.add(playlist);
+        Playlist playlist = new Playlist(parts[0]); // playlist name will always be first index of array
+        Stream.of(parts).skip(1) // converts array to stream and skips the playlist name
+                .map(File::new) // converts each string path to file object
+                .filter(File::exists) // filters objects that dont exist
+                .forEach(songFile -> addSongToPlaylist(songFile, playlist)); // for each file, add to playlist
+
+        playlists.add(playlist); // we then add the newly constructed playlist into a list of playlist
     }
 
+    // method to add a song to playlist
     private void addSongToPlaylist(File songFile, Playlist playlist) {
         SongManager.createSongFromFile(songFile, song -> {
             if (song == null) return;
@@ -56,33 +62,34 @@ public class PlaylistManager {
         });
     }
 
-
+    // method to save playlist to txt file
     public void savePlaylists() {
         try {
-            List<String> lines = new ArrayList<>();
-            for (Playlist playlist : playlists) {
-                StringBuilder line = new StringBuilder(playlist.getName());
-                for (Song song : playlist.getSongs()) {
-                    line.append(";").append(song.getFilePath());
+            List<String> lines = new ArrayList<>(); // list of string
+            for (Playlist playlist : playlists) { // parses through each playlist in playlists list
+                StringBuilder line = new StringBuilder(playlist.getName()); // grabs the name of playlist
+                for (Song song : playlist.getSongs()) { // for each song in the playlist
+                    line.append(";").append(song.getFilePath()); // append ; and song's file path
                 }
-                lines.add(line.toString());
+                lines.add(line.toString()); // then add that to our list of strings
             }
-            Files.write(Paths.get(PLAYLISTS_FILE), lines);
+            Files.write(Paths.get(PLAYLISTS_FILE), lines); // write onto playlist.txt
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // Method to create a new playlist
+    // method to create a new playlist
     public void createPlaylist(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Playlist name cannot be null or empty.");
         }
+
         Playlist newPlaylist = new Playlist(name.trim());
         playlists.add(newPlaylist);
     }
 
-    // Method to delete a playlist
+    // method to delete a playlist
     public void deletePlaylist(Playlist playlist) {
         if (playlist == null) {
             throw new IllegalArgumentException("Playlist cannot be null.");
@@ -90,7 +97,7 @@ public class PlaylistManager {
         playlists.remove(playlist);
     }
 
-    // Method to rename a playlist
+    // method to rename a playlist
     public void renamePlaylist(Playlist playlist, String newName) {
         if (playlist == null) {
             throw new IllegalArgumentException("Playlist cannot be null.");
@@ -99,8 +106,5 @@ public class PlaylistManager {
             throw new IllegalArgumentException("New playlist name cannot be null or empty.");
         }
         playlist.setName(newName.trim());
-        // If your Playlist class is properly bound to the UI,
-        // the UI will automatically reflect the name change.
-        // Otherwise, you may need to refresh or update the view.
     }
 }

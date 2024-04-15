@@ -6,7 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="refactored some code, havent tested all functions yet&#10;&#10;there is a slight bug with pressing shuffle button after importing new songs into application">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/PlaylistManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/PlaylistManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/Song.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/SongManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/SongManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playlists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/playlists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/songs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/songs.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

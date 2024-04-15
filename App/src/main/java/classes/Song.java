@@ -45,12 +45,13 @@ public class Song extends Track{
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-    // Add a setter for the album image
+
+    // setter for the album image
     public void setAlbumImage(Image albumImage) {
         this.albumImage = albumImage;
     }
 
-    // Add a getter for the album image
+    // getter for the album image
     public Image getAlbumImage() {
         return albumImage;
     }

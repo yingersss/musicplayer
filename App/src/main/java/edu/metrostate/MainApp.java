@@ -15,7 +15,7 @@ public class MainApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("musicplayertest.fxml"));
         AnchorPane root = loader.load();
 
-        // Get the controller from the FXMLLoader
+        // get the controller from the FXMLLoader
         MainSceneController mainSceneController = loader.getController();
 
         Scene scene = new Scene(root);
@@ -23,7 +23,8 @@ public class MainApp extends Application {
         stage.setTitle("Music Player");
         stage.setResizable(false); // Could not figure out how to dynamically stretch the album image or vbox that held the image
         stage.show();
-        // Set the close request event to call the handleApplicationClose method
+
+        // set the close request event to call the handleApplicationClose method
         // basically saving the songs list to a txtpad
         stage.setOnCloseRequest(event -> mainSceneController.handleApplicationClose());
     }
