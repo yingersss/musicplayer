@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="refactored some code, havent tested all functions yet&#10;&#10;there is a slight bug with pressing shuffle button after importing new songs into application">
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="refactored a lot of code&#10;added lots of comments&#10;emptied playlist and song txt files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/PlaylistManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/PlaylistManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/Song.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/java/classes/SongManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/classes/SongManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/App/src/main/java/edu/metrostate/MainSceneController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playlists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/playlists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/songs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/songs.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -351,11 +345,18 @@
       <option name="project" value="LOCAL" />
       <updated>1713157248541</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="refactored a lot of code&#10;added lots of comments&#10;emptied playlist and song txt files">
+      <option name="closed" value="true" />
+      <created>1713212037689</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1713212037689</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added drag and drop feature&#10;currently not taking mp3 file's metadata to fill in the details yet" />
     <MESSAGE value="added pause image in resources&#10;song now plays when i click play after dragging them&#10;play button also switches to pause when i click them" />
     <MESSAGE value="added feature where application saves paths of songs loaded in and reloads them again on application start up&#10;need to work on event handlers that handle selecting and changing what song is currently playing" />
     <MESSAGE value="now able to select other songs and click play&#10;&#10;small bug when selecting another song while a song is still playing and clicking pause/play, play button icon bugs out" />
@@ -380,6 +381,7 @@
     <MESSAGE value="extracted genre metadata" />
     <MESSAGE value="fixed saving bug on new launch of application" />
     <MESSAGE value="refactored some code, havent tested all functions yet&#10;&#10;there is a slight bug with pressing shuffle button after importing new songs into application" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactored some code, havent tested all functions yet&#10;&#10;there is a slight bug with pressing shuffle button after importing new songs into application" />
+    <MESSAGE value="refactored a lot of code&#10;added lots of comments&#10;emptied playlist and song txt files" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactored a lot of code&#10;added lots of comments&#10;emptied playlist and song txt files" />
   </component>
 </project>
