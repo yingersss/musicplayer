@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="updated readme to fit milestone 4" />
+    <list default="true" id="3f85a68c-5142-4de7-bcde-db45cf0689ee" name="Changes" comment="included sample mp3 files in resources folder&#10;updated readme to reflect functional requirements changes">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -358,12 +361,26 @@
       <option name="project" value="LOCAL" />
       <updated>1713214264367</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="included sample mp3 files in resources folder">
+      <option name="closed" value="true" />
+      <created>1713214872101</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1713214872101</updated>
+    </task>
+    <task id="LOCAL-00034" summary="included sample mp3 files in resources folder&#10;updated readme to reflect functional requirements changes">
+      <option name="closed" value="true" />
+      <created>1713215132579</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1713215132579</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added feature where application saves paths of songs loaded in and reloads them again on application start up&#10;need to work on event handlers that handle selecting and changing what song is currently playing" />
-    <MESSAGE value="now able to select other songs and click play&#10;&#10;small bug when selecting another song while a song is still playing and clicking pause/play, play button icon bugs out" />
     <MESSAGE value="retrieved metadata for album art and now populates the albumImageView portion" />
     <MESSAGE value="added tracking progress bar and time label duration" />
     <MESSAGE value="added new button functionalities&#10;next button&#10;previous button&#10;repeat button" />
@@ -387,6 +404,8 @@
     <MESSAGE value="refactored some code, havent tested all functions yet&#10;&#10;there is a slight bug with pressing shuffle button after importing new songs into application" />
     <MESSAGE value="refactored a lot of code&#10;added lots of comments&#10;emptied playlist and song txt files" />
     <MESSAGE value="updated readme to fit milestone 4" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated readme to fit milestone 4" />
+    <MESSAGE value="included sample mp3 files in resources folder" />
+    <MESSAGE value="included sample mp3 files in resources folder&#10;updated readme to reflect functional requirements changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="included sample mp3 files in resources folder&#10;updated readme to reflect functional requirements changes" />
   </component>
 </project>

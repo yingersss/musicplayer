@@ -36,5 +36,5 @@ To run the application follow these steps:
 8. Click the play button, the project should then compile and start the application, showing the skeleton of our application UI.
 
 ## Sample Songs
-- I have included some mp3 files within the resources folder and have imported them into the application for users to test if they don't have mp3 files to work with.
+- I have included some mp3 files within the resources/songs folder for users to test if they don't have mp3 files to work with.
 - I have also created sample Playlists for users to test functions with.
