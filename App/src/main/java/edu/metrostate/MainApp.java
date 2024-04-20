@@ -19,6 +19,7 @@ public class MainApp extends Application {
         MainSceneController mainSceneController = loader.getController();
 
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("Music Player");
         stage.setResizable(false); // Could not figure out how to dynamically stretch the album image or vbox that held the image

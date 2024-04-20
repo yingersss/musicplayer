@@ -99,22 +99,22 @@
             </Label>
             <AnchorPane VBox.vgrow="ALWAYS">
                <children>
-                  <Label fx:id="songNameInfo" layoutX="10.0" layoutY="14.0" prefHeight="35.0" prefWidth="380.0" text="Song Name" AnchorPane.bottomAnchor="654.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="14.0">
+                  <Label fx:id="songNameInfo" styleClass="label-title" layoutX="10.0" layoutY="14.0" prefHeight="35.0" prefWidth="380.0" text="Song Name" AnchorPane.bottomAnchor="654.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="14.0">
                      <font>
                         <Font name="System Bold" size="25.0" />
                      </font>
                   </Label>
-                  <Label fx:id="artistNameInfo" layoutX="10.0" layoutY="44.0" prefHeight="17.0" prefWidth="380.0" text="Artist(s)" AnchorPane.bottomAnchor="639.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="44.0">
+                  <Label fx:id="artistNameInfo" styleClass="label-songinfo" layoutX="10.0" layoutY="44.0" prefHeight="17.0" prefWidth="380.0" text="Artist(s)" AnchorPane.bottomAnchor="639.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="44.0">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="albumNameInfo" layoutX="10.0" layoutY="76.0" prefHeight="17.0" prefWidth="380.0" text="Album" AnchorPane.bottomAnchor="604.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="76.0">
+                  <Label fx:id="albumNameInfo" styleClass="label-songinfo" layoutX="10.0" layoutY="76.0" prefHeight="17.0" prefWidth="380.0" text="Album" AnchorPane.bottomAnchor="604.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="76.0">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="genreInfo" layoutX="10.0" layoutY="100.0" prefHeight="17.0" prefWidth="380.0" text="Genre(s)" AnchorPane.bottomAnchor="580.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
+                  <Label fx:id="genreInfo" styleClass="label-songinfo" layoutX="10.0" layoutY="100.0" prefHeight="17.0" prefWidth="380.0" text="Genre(s)" AnchorPane.bottomAnchor="580.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -139,7 +139,7 @@
          <children>
             <AnchorPane prefHeight="350.0" prefWidth="400.0">
                <children>
-                  <Button fx:id="shuffleButton" layoutX="14.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleShuffleAction" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="334.0" AnchorPane.topAnchor="163.0">
+                  <Button fx:id="shuffleButton" layoutX="14.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleShuffleAction" styleClass="button-round" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="334.0" AnchorPane.topAnchor="163.0">
                      <graphic>
                         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -147,7 +147,7 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Button fx:id="previousButton" layoutX="92.0" layoutY="163.0" mnemonicParsing="false" onAction="#handlePreviousAction" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="247.0" AnchorPane.topAnchor="163.0">
+                  <Button fx:id="previousButton" layoutX="92.0" layoutY="163.0" mnemonicParsing="false" onAction="#handlePreviousAction" styleClass="button-round" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="247.0" AnchorPane.topAnchor="163.0">
                      <graphic>
                         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -155,7 +155,7 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Button fx:id="playButton" layoutX="174.0" layoutY="163.0" mnemonicParsing="false" onAction="#handlePlayAction" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="174.0" AnchorPane.rightAnchor="174.0" AnchorPane.topAnchor="163.0">
+                  <Button fx:id="playButton" layoutX="174.0" layoutY="163.0" mnemonicParsing="false" onAction="#handlePlayAction" styleClass="button-round" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="174.0" AnchorPane.rightAnchor="174.0" AnchorPane.topAnchor="163.0">
                      <graphic>
                         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -163,7 +163,7 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Button fx:id="nextButton" layoutX="261.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleNextAction" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="247.0" AnchorPane.rightAnchor="87.0" AnchorPane.topAnchor="163.0">
+                  <Button fx:id="nextButton" layoutX="261.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleNextAction" styleClass="button-round" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="247.0" AnchorPane.rightAnchor="87.0" AnchorPane.topAnchor="163.0">
                      <graphic>
                         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -171,7 +171,7 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Button fx:id="repeatButton" layoutX="334.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleRepeatAction" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="334.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="163.0">
+                  <Button fx:id="repeatButton" layoutX="334.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleRepeatAction" styleClass="button-round" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="334.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="163.0">
                      <graphic>
                         <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -187,10 +187,10 @@
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Label fx:id="timeLabel" layoutX="7.0" layoutY="18.0" text="0:00 / 0:00" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="1139.0" AnchorPane.topAnchor="18.0" />
-                  <Slider fx:id="progressSlider" layoutX="70.0" layoutY="16.0" onMouseClicked="#handleSliderMouseClicked" onMouseDragged="#handleSliderDrag" onMouseReleased="#handleSliderMouseReleased" prefHeight="20.0" prefWidth="938.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="190.0" />
-                  <Slider fx:id="volumeSlider" layoutX="1046.0" layoutY="19.0" value="50" />
-                  <ImageView fitHeight="25.0" fitWidth="37.0" layoutX="1015.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                  <Label fx:id="timeLabel" layoutX="24.0" layoutY="17.0" prefHeight="17.0" prefWidth="87.0" text="0:00 / 0:00" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="1089.0" AnchorPane.topAnchor="17.0" />
+                  <Slider fx:id="progressSlider" layoutX="106.0" layoutY="16.0" onMouseClicked="#handleSliderMouseClicked" onMouseDragged="#handleSliderDrag" onMouseReleased="#handleSliderMouseReleased" prefHeight="20.0" prefWidth="900.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="190.0" />
+                  <Slider fx:id="volumeSlider" layoutX="1052.0" layoutY="19.0" value="50" />
+                  <ImageView fitHeight="25.0" fitWidth="37.0" layoutX="1027.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@/images/volume.png" />
                      </image>

@@ -123,7 +123,7 @@ public class SongManager {
         // if empty then store unknown
         mediaPlayer.setOnReady(() -> {
             String title = media.getMetadata().containsKey("title") ?
-                    media.getMetadata().get("title").toString() : "Unknown Title";
+                    media.getMetadata().get("title").toString() : file.getName().replaceFirst("[.][^.]+$", "");
 
             String artist = media.getMetadata().containsKey("artist") ?
                     media.getMetadata().get("artist").toString() : "Unknown Artist";
