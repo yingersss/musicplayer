@@ -19,16 +19,10 @@ public class Episode extends Track {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(LocalDate releaseDate) {
-        this.releaseDate = releaseDate;
-    }
 
 }

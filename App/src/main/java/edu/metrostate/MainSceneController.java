@@ -688,10 +688,6 @@ public class MainSceneController implements Initializable {
         songListView.refresh(); // updates listview
     }
 
-    private void setUpSongListView() {
-
-    }
-
     private void setupDragAndDropHandlers() {
         // drag over handler
         songListView.setOnDragOver(event -> {

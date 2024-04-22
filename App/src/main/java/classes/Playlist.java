@@ -39,9 +39,4 @@ public class Playlist {
         songs.remove(song);
     }
 
-    @Override
-    public String toString() {
-        return getName();
-    }
-
 }
